@@ -78,18 +78,24 @@ class WfqQuery(Client.Application):
     print (self._end)
     print Core.Time.FromString(self._end,"%Y-%m-%d %H:%M:%S")
 
+    #Creacion de un archivo 
+    outfile = open('texto.txt', 'a')
+
     it = self.query().getWaveformQuality(DataModel.WaveformStreamID(net, sta, loc, cha, ""),
                                          self._parameter,
                                          Core.Time.FromString(self._start,"%Y-%m-%d %H:%M:%S"),
                                          Core.Time.FromString(self._end,"%Y-%m-%d %H:%M:%S"))
     while it.get():
-     #se debe realzar el Cast para poder acceder a los atributos de la clase tWaveformQuality como .value() mas en  http://www.seiscomp3.org/doc/seattle/2013.274/base/api-python.html#api-python-datamodel-waveformquality
+     #se debe realzar el Cast para poder acceder a los atributos de la clase WaveformQuality como .value() mas en  http://www.seiscomp3.org/doc/seattle/2013.274/base/api-python.html#api-python-datamodel-waveformquality
       wfq = DataModel.WaveformQuality.Cast(it.get())
-      print wfq.start() #muestra la fecha de inicio
-      print wfq.value() #muestra el procentaje
+      #print wfq.start() #muestra la fecha de inicio
+      #print wfq.value() #muestra el procentaje
       xarc.writeObject(wfq)
+      outfile.write(str(wfq.value())+"\n")
+      
       it.step()
 
+    outfile.close()
     xarc.close()
     return True
 
