@@ -4,6 +4,8 @@
 import sys
 import re
 from seiscomp3 import Client, IO, DataModel, Core
+import requests
+import json
 
 class WfqQuery(Client.Application):
 
@@ -19,13 +21,7 @@ class WfqQuery(Client.Application):
 
 
   def createCommandLineDescription(self):
-    self.commandline().addGroup("Output")
-    self.commandline().addStringOption("Output", "filename,o", "xml output filename");
-    self.commandline().addOption("Output", "formatted,f", "use formatted xml output")
-
     self.commandline().addGroup("Query")
-    self.commandline().addStringOption("Query", "streamID,w", "waveform stream ID: <networkCode>.<stationCode>.<locationCode>.<channelCode>")  
-    self.commandline().addStringOption("Query", "parameter,p", "QC parameter: (e.g. LATENCY, DELAY, ...)")
     self.commandline().addStringOption("Query", "startTime,b", "start time: YYYY-MM-DD hh:mm:ss")
     self.commandline().addStringOption("Query", "endTime,e", "end time: YYYY-MM-DD hh:mm:ss")
 
@@ -33,44 +29,30 @@ class WfqQuery(Client.Application):
 
 
   def validateParameters(self):
-    if self.commandline().hasOption("filename"):
-      self._outfile = self.commandline().optionString("filename")
-    else:
-      print "Please specify the xml output filename!"
-      return False
-    
-    if (not self.commandline().hasOption("streamID") or not self.commandline().hasOption("parameter") or
-        not self.commandline().hasOption("startTime") or not self.commandline().hasOption("endTime")):
-      print "Please give me all query parameters (--streamID, --parameter, --startTime, --endTime)!"
-      return False
+    self._outfile = 'xmx.xml'
+    self._streamID = 'CM.BRR.00.HHZ'
 
-    self._streamID = self.commandline().optionString("streamID")
-    if re.search("[*?]",self._streamID):
-      print "Please do not use wildcards in the streamID!"
-      return False
-
-    self._parameter = self.commandline().optionString("parameter")
-    #if not self._parameter in ([DataModel.EQCNameNames.name(i).replace(" ","_").upper() for i in xrange(DataModel.EQCNameQuantity)]):
-      #print "The given parameter name (%s) is unknown" % self._parameter
-      #return False
-
+    self._parameter = "availability"
+    print (self._parameter)
     self._start = self.commandline().optionString("startTime")
     self._end = self.commandline().optionString("endTime")
 
     return True
 
-
   def run(self):
+    response = requests.get("http://10.100.100.232:8081/query/stations.json")
+
+   # if response.status_code == 200:
+     # results = response.json()
+     # obj=json.read(response)
+   # else:
+      #print "Error code %s" % response.status_code
+
+
     if not self.query():
       print "No database connection"
       return False
     
-    xarc = IO.XMLArchive()
-    if not xarc.create(self._outfile, True, True):
-      print "Could not create xml output file %s!" % self._outfile
-      return False
-
-    xarc.setFormattedOutput(self.commandline().hasOption("formatted"))
     (net, sta, loc, cha) = self._streamID.split(".")
     print net+" "+sta+" "+loc+" "+cha
     print (self._start)
@@ -79,7 +61,7 @@ class WfqQuery(Client.Application):
     print Core.Time.FromString(self._end,"%Y-%m-%d %H:%M:%S")
 
     #Creacion de un archivo 
-    outfile = open('texto.txt', 'a')
+    outfile = open('texto.txt', 'w')
 
     it = self.query().getWaveformQuality(DataModel.WaveformStreamID(net, sta, loc, cha, ""),
                                          self._parameter,
@@ -90,13 +72,11 @@ class WfqQuery(Client.Application):
       wfq = DataModel.WaveformQuality.Cast(it.get())
       #print wfq.start() #muestra la fecha de inicio
       #print wfq.value() #muestra el procentaje
-      xarc.writeObject(wfq)
-      outfile.write(str(wfq.value())+"\n")
+      outfile.write(net+" "+sta+" "+loc+" "+cha+" "+str(wfq.value())+"\n")
       
       it.step()
 
     outfile.close()
-    xarc.close()
     return True
 
 

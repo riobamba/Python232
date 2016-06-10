@@ -35,7 +35,7 @@ class InvApp(seiscomp3.Client.Application):
                 nsta = net.stationCount()
                 for ista in xrange(nsta):
                     sta = net.station(ista)
-                    line = "%-2s %-5s %9.4f %9.4f %6.1f" % ( net.code(), sta.code(), sta.latitude(), sta.longitude(), sta.elevation() )
+                    line = "%-2s %-5s %-5s %9.4f %9.4f %6.1f" % ( net.code(), sta.code(),sta.sensorLocation(0) ,sta.latitude(), sta.longitude(), sta.elevation() )
                     try:
                         start = sta.start()
                     except:
