@@ -1,0 +1,65 @@
+Generic:
+  -h [ --help ]                  produce help message
+  -V [ --version ]               show version information
+  --config-file arg              Use alternative configuration file
+  --plugins arg                  Load given plugins
+  -D [ --daemon ]                run as daemon
+  --auto-shutdown arg (=0)       enable/disable self-shutdown because a master
+                                 module shutdown
+  --shutdown-master-module arg   sets the name of the master-module used for
+                                 auto-shutdown
+  --shutdown-master-username arg sets the name of the master-username used for
+                                 auto-shutdown
+
+Verbose:
+  --verbosity arg          verbosity level [0..4]
+  -v [ --v ]               increase verbosity level (may be repeated, eg. -vv)
+  -q [ --quiet ]           quiet mode: no logging output
+  --print-component arg    print the log component (default: file:1, stdout:0)
+  --print-context arg (=0) print source file and line number
+  --component arg          limits the logging to a certain component. this
+                           option can be given more than once
+  -s [ --syslog ]          use syslog
+  -l [ --lockfile ] arg    path to lock file
+  --console arg (=0)       send log output to stdout
+  --debug                  debug mode: --verbosity=4 --console=1
+  --trace                  trace mode: --verbosity=4 --console=1
+                           --print-component=1 --print-context=1
+  --log-file arg           Use alternative log file
+
+Messaging:
+  -u [ --user ] arg (=qclog6398)        client name used when connecting to the
+                                        messaging
+  -H [ --host ] arg (=seismo1.sgc.gov.co)
+                                        messaging host (host[:port])
+  -t [ --timeout ] arg (=3)             connection timeout in seconds
+  -g [ --primary-group ] arg (=LISTENER_GROUP)
+                                        the primary message group of the client
+  -S [ --subscribe-group ] arg          a group to subscribe to. this option
+                                        can be given more than once
+  --encoding arg (=binary)              sets the message encoding (binary or
+                                        xml)
+  --start-stop-msg arg (=0)             sets sending of a start- and a stop
+                                        message
+
+QC:
+  --enums               set for the old Qcmessage
+  --inventory           load the stations out of the inventory and create all
+                        rrd's and index-files(Overwrite old rrd's)
+                        Default:write the rrd- and index-files on the fly
+
+////////////////////////////////////////////////////////////////////////qclog --debug
+12:41:13 [info] Connect to messaging
+12:41:13 [debug] Trying to connect to qclog9892@seismo1.sgc.gov.co with primary group = LISTENER_GROUP
+12:41:13 [info] Connecting to server: seismo1.sgc.gov.co
+12:41:13 [info] Connected to message server: seismo1.sgc.gov.co
+12:41:13 [info] Joining MASTER_GROUP group
+12:41:13 [info] Sending connect message to server: seismo1.sgc.gov.co
+12:41:13 [info] Server version is 'Jakarta 2015.020'
+12:41:13 [info] Outgoing messages are encoded to match schema version 0.7
+12:41:13 [info] user "qclog9892" connected successfully to seismo1.sgc.gov.co
+12:41:13 [info] Setting message encoding to binary
+12:41:13 [info] Joining group: CONFIG
+12:41:13 [info] Joining group: QC
+
+
