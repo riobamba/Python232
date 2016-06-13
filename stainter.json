@@ -1,0 +1,276 @@
+{
+  "stations": [
+    {
+      "lat": "-75.4",
+      "long": "4.49",
+      "net": "OM",
+      "sta": "ANIL",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-70.01",
+      "long": "12.51",
+      "net": "PR",
+      "sta": "AUA1",
+      "loc": "",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-80.27",
+      "long": "7.79",
+      "net": "RP",
+      "sta": "AZU",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-79.84",
+      "long": "9.17",
+      "net": "CU",
+      "sta": "BCIP",
+      "loc": "00",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-60.52",
+      "long": "2.4",
+      "net": "BR",
+      "sta": "BOAV",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-82.69",
+      "long": "8.79",
+      "net": "PA",
+      "sta": "BRU2",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-80.85",
+      "long": "7.33",
+      "net": "RP",
+      "sta": "CACAO",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-78.4",
+      "long": "0.31",
+      "net": "EC",
+      "sta": "CUSE",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-70.64",
+      "long": "10.92",
+      "net": "VE",
+      "sta": "DABV",
+      "loc": "",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-75.4",
+      "long": "4.86",
+      "net": "OM",
+      "sta": "ELA",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-69.48",
+      "long": "7",
+      "net": "VE",
+      "sta": "ELOV",
+      "loc": "",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-77.34",
+      "long": "1.23",
+      "net": "OP",
+      "sta": "GCUF",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-81.25",
+      "long": "7.8",
+      "net": "RP",
+      "sta": "GMAL",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-75.11",
+      "long": "19.93",
+      "net": "CU",
+      "sta": "GTBY",
+      "loc": "00",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-68.13",
+      "long": "-16.29",
+      "net": "GT",
+      "sta": "LPAZ",
+      "loc": "00",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-77.53",
+      "long": "18.23",
+      "net": "CU",
+      "sta": "MTDJ",
+      "loc": "00",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-78.45",
+      "long": "0.24",
+      "net": "IU",
+      "sta": "OTAV",
+      "loc": "00",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-78.79",
+      "long": "0.27",
+      "net": "EC",
+      "sta": "PAC1",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-90.29",
+      "long": "-0.67",
+      "net": "IU",
+      "sta": "PAYG",
+      "loc": "00",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-80.33",
+      "long": "8.49",
+      "net": "RP",
+      "sta": "PNME",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-82.87",
+      "long": "8.2",
+      "net": "RP",
+      "sta": "PTP",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-71.29",
+      "long": "18.98",
+      "net": "CU",
+      "sta": "SDDR",
+      "loc": "00",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-70.86",
+      "long": "8.28",
+      "net": "VE",
+      "sta": "SOCV",
+      "loc": "",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-69.91",
+      "long": "-4.19",
+      "net": "BR",
+      "sta": "TBTG",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-87.27",
+      "long": "14.06",
+      "net": "CU",
+      "sta": "TGUH",
+      "loc": "00",
+      "cha": "BHZ"
+    },
+    {
+      "lat": "-77.79",
+      "long": "0.72",
+      "net": "EC",
+      "sta": "TULM",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-79.53",
+      "long": "8.98",
+      "net": "RP",
+      "sta": "UPA",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-78.01",
+      "long": "8.55",
+      "net": "RP",
+      "sta": "UPD2",
+      "loc": "",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-76.4",
+      "long": "2.33",
+      "net": "CM",
+      "sta": "CONO",
+      "loc": "00",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-75.95",
+      "long": "2.84",
+      "net": "CM",
+      "sta": "MARO",
+      "loc": "00",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-76.61",
+      "long": "2.13",
+      "net": "CM",
+      "sta": "SOTO",
+      "loc": "00",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-73.56",
+      "long": "9.54",
+      "net": "CM",
+      "sta": "LL1C",
+      "loc": "00",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-73.72",
+      "long": "9.75",
+      "net": "CM",
+      "sta": "LL5C",
+      "loc": "00",
+      "cha": "HHZ"
+    },
+    {
+      "lat": "-73.27",
+      "long": "9.74",
+      "net": "CM",
+      "sta": "LL6C",
+      "loc": "00",
+      "cha": "HHZ"
+    }
+  ]
+}

@@ -30,11 +30,7 @@ class WfqQuery(Client.Application):
 
 
   def validateParameters(self):
-    self._outfile = 'xmx.xml'
-    self._streamID = 'CM.BRR.00.HHZ'
-
     self._parameter = "availability"
-    print (self._parameter)
     self._start = self.commandline().optionString("startTime")
     self._end = self.commandline().optionString("endTime")
 
@@ -47,39 +43,31 @@ class WfqQuery(Client.Application):
     #Creacion de un archivo 
     outfile = open('texto.txt', 'w')
     
-    response = requests.get("http://10.100.100.232:8081/query/stations.json")
-    if response.status_code == 200:
-      results = response.json()
-      for result in results['Inventory']['network']:
-        for station in result['station']:
-          for location in station['sensorLocation']:
-            for channel in location['stream']:
-              print result['code'],station['code'],location['code'],channel['code']
-              net=str(result['code'])
-              sta=str(station['code'])
-              loc=str(location['code'])
-              cha=str(channel['code'])
-              outfile.write(net+" "+sta+" "+loc+" "+cha+"\n")
-             # it = self.query().getWaveformQuality(DataModel.WaveformStreamID(net,sta,loc,cha, ""),
-              #                                               self._parameter,
-               #                                              Core.Time.FromString(self._start,"%Y-%m-%d %H:%M:%S"),
-                #                                             Core.Time.FromString(self._end,"%Y-%m-%d %H:%M:%S"))
-              #while it.get():
-                #se debe realzar el Cast para poder acceder a los atributos de la clase WaveformQuality como .value() mas en  http://www.seiscomp3.org/doc/seattle/2013.274/base/api-python.html#api-python-datamodel-waveformquality
-                #wfq = DataModel.WaveformQuality.Cast(it.get())
-                #print wfq.start() #muestra la fecha de inicio
-                #print wfq.value() #muestra el procentaje
-                #outfile.write(net+" "+sta+" "+loc+" "+cha+" "+str(wfq.value())+"\n")
+    with open('stations.json') as data_file:    
+      result = json.load(data_file)
+      for station in result['stations']:
+        net=str(station['net'])
+        sta=str(station['sta'])
+        loc=str(station['loc'])
+        cha=str(station['cha'])
+        lat=str(station['lat'])
+        lon=str(station['long'])
+        print sta
+        it = self.query().getWaveformQuality(DataModel.WaveformStreamID(net,sta,loc,cha, ""),
+                                                       self._parameter,
+                                                       Core.Time.FromString(self._start,"%Y-%m-%d %H:%M:%S"),
+                                                       Core.Time.FromString(self._end,"%Y-%m-%d %H:%M:%S"))
+        val=0;
+        while it.get():
+          #se debe realzar el Cast para poder acceder a los atributos de la clase WaveformQuality como .value() mas en  http://www.seiscomp3.org/doc/seattle/2013.274/base/api-python.html#api-python-datamodel-waveformquality
+          wfq = DataModel.WaveformQuality.Cast(it.get())
+          #print wfq.value() #muestra la fecha de inicio
+          val += wfq.value() 
+          it.step()
+        val=(val/24)
+        print val
+        outfile.write(sta+" "+str(val)+"\n")
                
-                          
-                #it.step()
-    else:
-        print "Error code %s" % response.status_code
-
-    
-
-
-
     outfile.close()
     return True
 
