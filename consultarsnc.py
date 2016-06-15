@@ -9,30 +9,34 @@ import json
 
 class WfqQuery(Client.Application):
 
-  def __init__(self, argc, argv):
+  def __init__(self, argc, argv,fecha,entrada,salida):
+    self._fecha=fecha
+    self._entrada=entrada
+    self._salida=salida
     Client.Application.__init__(self, argc, argv)
     self.setPrimaryMessagingGroup("LISTENER_GROUP")
     self.addMessagingSubscription("QC")
     self.setMessagingEnabled(True)
     self.setDatabaseEnabled(True, True)
     self.setAutoApplyNotifierEnabled(False)
-    self.setInterpretNotifierEnabled(True)
-    self.run()
+    self.setInterpretNotifierEnabled(True) 
+
 
 
 
   def run(self):
-
-    self._start = '2016-06-11 00:00:00'
-    self._end = '2016-06-11 01:00:00'
+    self._start=self._fecha+' 00:00:00'
+    self._end=self._fecha+' 23:00:00'
     self._parameter= 'availability'
     if not self.query():
       print "Sin conexion a la base de datos"
       return False
+    else:
+      print "Conexion a la base de datos"
     #Creacion de un archivo 
-    outfile = open('texto.txt', 'w')
+    outfile = open(self._salida, 'w')
     
-    with open('stations.json') as data_file:    
+    with open(self._entrada) as data_file:    
       result = json.load(data_file)
       for station in result['stations']:
         net=str(station['net'])
@@ -41,7 +45,7 @@ class WfqQuery(Client.Application):
         cha=str(station['cha'])
         lat=str(station['lat'])
         lon=str(station['long'])
-        print sta
+        #print sta
         it = self.query().getWaveformQuality(DataModel.WaveformStreamID(net,sta,loc,cha, ""),
                                                        self._parameter,
                                                        Core.Time.FromString(self._start,"%Y-%m-%d %H:%M:%S"),
@@ -55,14 +59,11 @@ class WfqQuery(Client.Application):
           val += wfq.value() 
           it.step()
         val=(val/24)
-        print val
+        #print val
         outfile.write(sta+" "+str(val)+"\n")
                
     outfile.close()
+    print "TERMINADO"
     return True
-  
-  def data(self):
-      return "sirve"
 
-app = WfqQuery(len(sys.argv), sys.argv)
-sys.exit(app())
+
