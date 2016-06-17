@@ -1,21 +1,30 @@
 import sys
 import consultarsnc
 import multiprocessing
+from datetime import datetime,timedelta
+from apscheduler.schedulers.blocking import BlockingScheduler
 
-def funcionamiento(fecha,entrada,salida):
-  app=consultarsnc.WfqQuery(len(sys.argv), sys.argv, fecha,entrada,salida)
+
+def funcionamiento(entrada):
+  hoy = datetime.now()
+  dias = timedelta(days=-1)
+  ayer = hoy+dias
+  fecha= ayer.strftime("%Y-%m-%d")
+  print fecha
+  app=consultarsnc.WfqQuery(len(sys.argv), sys.argv, fecha,entrada)
   app()
 
 
 def main():
-  r = multiprocessing.Process(target=funcionamiento,args=("2016-06-14","stations.json","rsnc.txt"))
+  r = multiprocessing.Process(target=funcionamiento,args=("stations.json"))
   r.start()
-  a = multiprocessing.Process(target=funcionamiento,args=("2016-06-16","staacel.json","rnac.txt"))
+  a = multiprocessing.Process(target=funcionamiento,args=("staacel.json"))
   a.start()
-  i = multiprocessing.Process(target=funcionamiento,args=("2016-06-16","stainter.json","inter.txt"))
+  i = multiprocessing.Process(target=funcionamiento,args=("stainter.json"))
   i.start()
 
 
-main()
-print ("SIGUE")
+sched = BlockingScheduler()
+sched.add_job(main, 'cron', hour=00, minute=05)
+sched.start()
 

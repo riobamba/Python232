@@ -10,10 +10,10 @@ import sqlite3
 
 class WfqQuery(Client.Application):
 
-  def __init__(self, argc, argv,fecha,entrada,salida):
+  def __init__(self, argc, argv,fecha,entrada):
     self._fecha=fecha
+    print self._fecha
     self._entrada=entrada
-    self._salida=salida
     Client.Application.__init__(self, argc, argv)
     self.setPrimaryMessagingGroup("LISTENER_GROUP")
     self.addMessagingSubscription("QC")
@@ -67,7 +67,7 @@ class WfqQuery(Client.Application):
                   VALUES(?,?,?,?,?,?,?,?)''', (net,sta,loc,lat,lon,str(val), self._parameter,self._fecha))
         #outfile.write(sta+" "+str(val)+"\n")
                
-    outfile.close()
+    #outfile.close()
     conn.commit()
     print "TERMINADO"
     return True
