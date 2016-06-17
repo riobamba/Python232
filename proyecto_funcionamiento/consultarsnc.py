@@ -4,6 +4,7 @@
 import sys
 from seiscomp3 import Client, DataModel, Core
 import json
+import sqlite3
 
 
 
@@ -28,13 +29,15 @@ class WfqQuery(Client.Application):
     self._start=self._fecha+' 00:00:00'
     self._end=self._fecha+' 23:00:00'
     self._parameter= 'availability'
+    conn = sqlite3.connect('disponiblidad.db')
+    cursor = conn.cursor()
     if not self.query():
       print "Sin conexion a la base de datos"
       return False
     else:
       print "Conexion a la base de datos"
     #Creacion de un archivo 
-    outfile = open(self._salida, 'w')
+    #outfile = open(self._salida, 'w')
     
     with open(self._entrada) as data_file:    
       result = json.load(data_file)
@@ -59,10 +62,13 @@ class WfqQuery(Client.Application):
           val += wfq.value() 
           it.step()
         val=(val/24)
-        #print val
-        outfile.write(sta+" "+str(val)+"\n")
+        #print sta+" "+str(val)
+        cursor.execute('''INSERT INTO funcionamiento (net,sta,loc,lat,lon,fun,tipo,fecha)
+                  VALUES(?,?,?,?,?,?,?,?)''', (net,sta,loc,lat,lon,str(val), self._parameter,self._fecha))
+        #outfile.write(sta+" "+str(val)+"\n")
                
     outfile.close()
+    conn.commit()
     print "TERMINADO"
     return True
 
