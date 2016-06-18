@@ -17,3 +17,10 @@ http://www.tutorialspoint.com/sqlite/sqlite_php.htm
 
 para dejar corriendo un proceso en segundo plano es necesario ejecutar el comando $ sreen
 dentro de este se ejecuta la rutina
+
+modelo de datos para python de seiscomp
+http://www.seiscomp3.org/doc/seattle/2013.274/base/api-python.htm
+
+
+para crear un web service, hasta el momento el tutorial funciona en cloud9
+http://www.django-rest-framework.org/tutorial/1-serialization/
