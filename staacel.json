@@ -327,6 +327,14 @@
       "sta": "YOT",
       "loc": "10",
       "cha": "HNZ"
+    },
+    {
+      "lat": "-74.09",
+      "long": "4.64",
+      "net": "CM",
+      "sta": "REAC",
+      "loc": "10",
+      "cha": "HNZ"
     }
   ]
 }

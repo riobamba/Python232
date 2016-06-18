@@ -10,3 +10,10 @@ https://docs.python.org/2/library/sqlite3.html
 
 para trabajar con hilos y multiprocesos
 https://pymotw.com/2/multiprocessing/basics.html
+
+pagina para sqlite y php
+http://www.tutorialspoint.com/sqlite/sqlite_php.htm
+
+
+para dejar corriendo un proceso en segundo plano es necesario ejecutar el comando $ sreen
+dentro de este se ejecuta la rutina

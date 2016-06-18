@@ -2,7 +2,7 @@
 
 import sqlite3
 
-conn = sqlite3.connect('disponiblidad.db')
+conn = sqlite3.connect('disponibilidad.db')
 print "Opened database successfully";
 
 conn.execute('''CREATE TABLE funcionamiento(net VARCHAR, sta VARCHAR, loc VARCHAR, lat VARCHAR, lon VARCHAR, fun VARCHAR, tipo VARCHAR,fecha VARCHAR);''')

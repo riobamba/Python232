@@ -2,7 +2,7 @@
 
 import sqlite3
 
-conn = sqlite3.connect('disponiblidad.db')
+conn = sqlite3.connect('disponibilidad.db')
 print "Opened database successfully";
 
 cursor = conn.execute("SELECT net, sta, fun,fecha from funcionamiento")

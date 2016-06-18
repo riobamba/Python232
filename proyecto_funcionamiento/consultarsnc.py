@@ -29,7 +29,7 @@ class WfqQuery(Client.Application):
     self._start=self._fecha+' 00:00:00'
     self._end=self._fecha+' 23:00:00'
     self._parameter= 'availability'
-    conn = sqlite3.connect('disponiblidad.db')
+    conn = sqlite3.connect('disponibilidad.db')
     cursor = conn.cursor()
     if not self.query():
       print "Sin conexion a la base de datos"

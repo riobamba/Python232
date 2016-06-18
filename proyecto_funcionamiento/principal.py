@@ -24,7 +24,7 @@ def main1():
 
 
 sched = BlockingScheduler()
-sched.add_job(main1, 'cron', hour=13, minute=20)
+sched.add_job(main1, 'cron', hour=00, minute=05)
 sched.start()
 
 def tick():
