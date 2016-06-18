@@ -1,8 +1,10 @@
 import sys
 import consultarsnc
-import multiprocessing
 from datetime import datetime,timedelta
 from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
+import time
+import os
 
 
 def funcionamiento(entrada):
@@ -15,16 +17,21 @@ def funcionamiento(entrada):
   app()
 
 
-def main():
-  r = multiprocessing.Process(target=funcionamiento,args=("stations.json"))
-  r.start()
-  a = multiprocessing.Process(target=funcionamiento,args=("staacel.json"))
-  a.start()
-  i = multiprocessing.Process(target=funcionamiento,args=("stainter.json"))
-  i.start()
+def main1():
+  funcionamiento("stations.json")
+  funcionamiento("staacel.json")
+  funcionamiento("stainter.json")
 
 
 sched = BlockingScheduler()
-sched.add_job(main, 'cron', hour=00, minute=05)
+sched.add_job(main1, 'cron', hour=13, minute=20)
 sched.start()
+
+def tick():
+    print('Corriendo : %s' % datetime.now())
+
+if __name__ == '__main__':
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(tick, 'interval', seconds=60)
+    scheduler.start()
 
