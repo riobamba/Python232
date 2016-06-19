@@ -24,3 +24,14 @@ http://www.seiscomp3.org/doc/seattle/2013.274/base/api-python.htm
 
 para crear un web service, hasta el momento el tutorial funciona en cloud9
 http://www.django-rest-framework.org/tutorial/1-serialization/
+
+para isntalar el wsgi que se requiere para poder poner en produccion y teniendo instalado el apache 
+se debe isntaltar
+ apt-get install apache2-dev
+esto para que genere el apsx necesario para el wsgi funcione correctamente
+luego se debe verificar la ruta en la cual se instalo el apache que puede ser la por defecto
+/usr/local/apache/bin/apxs
+pero en mi caso con ubuntu esta quedo en 
+/usr/bin/apxs
+ahora cuando se tiene la ubicacion de este binario se procede con el tutorial de esta pagina
+http://modwsgi.readthedocs.io/en/develop/user-guides/quick-installation-guide.html#apache-requirements
