@@ -21,6 +21,9 @@ dentro de este se ejecuta la rutina
 modelo de datos para python de seiscomp
 http://www.seiscomp3.org/doc/seattle/2013.274/base/api-python.htm
 
+Buena pagina para django
+http://tutorial.djangogirls.org/es/django_urls/
+
 
 para crear un web service, hasta el momento el tutorial funciona en cloud9
 http://www.django-rest-framework.org/tutorial/1-serialization/
@@ -35,3 +38,18 @@ pero en mi caso con ubuntu esta quedo en
 /usr/bin/apxs
 ahora cuando se tiene la ubicacion de este binario se procede con el tutorial de esta pagina
 http://modwsgi.readthedocs.io/en/develop/user-guides/quick-installation-guide.html#apache-requirements
+El archivo que se debe modificar esta en la ruta
+sudo nano /etc/apache2/mods-available/wsgi.load
+teniendo en cuenta donde esta el modulo realmente este en etc entonces se coloca la linea
+LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi.so 
+Lueugo se carga el modulo y se reinicia el servicio
+sudo a2enmod wsgi
+sudo service apache2 restart
+
+
+video explicativo de como poner la aplicacion django a correr con apache 
+https://www.youtube.com/watch?v=VNBpdT0N8hw
+La documentacion oficial
+https://docs.djangoproject.com/es/1.9/howto/deployment/wsgi/modwsgi/
+tener en cuenta el archivo apache2.conf para ver si hay esta la ruta del proyecto python WSGIPythonPath /var/www/workspace
+tabien se debe modificar el httpd.conf y verificar la carpeta de sites-avalibles
