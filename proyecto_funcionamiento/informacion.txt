@@ -38,6 +38,7 @@ pero en mi caso con ubuntu esta quedo en
 /usr/bin/apxs
 ahora cuando se tiene la ubicacion de este binario se procede con el tutorial de esta pagina
 http://modwsgi.readthedocs.io/en/develop/user-guides/quick-installation-guide.html#apache-requirements
+https://pypi.python.org/pypi/mod_wsgi/4.4.8
 El archivo que se debe modificar esta en la ruta
 sudo nano /etc/apache2/mods-available/wsgi.load
 teniendo en cuenta donde esta el modulo realmente este en etc entonces se coloca la linea
