@@ -24,3 +24,8 @@ http://www.seiscomp3.org/doc/seattle/2013.274/base/api-python.htm
 
 para crear un web service, hasta el momento el tutorial funciona en cloud9
 http://www.django-rest-framework.org/tutorial/1-serialization/
+
+
+para hacer consulta a base de datos en django
+http://librosweb.es/libro/django_1_0/capitulo_5/seleccionar_objetos.html
+
