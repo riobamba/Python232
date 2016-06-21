@@ -286,7 +286,7 @@
       "sta": "LL1C",
       "loc": "00",
       "cha": "HHZ",
-      "admin": "INTER"
+      "admin": "SUB"
     },
     {
       "lat": "-73.72",
@@ -295,7 +295,7 @@
       "sta": "LL5C",
       "loc": "00",
       "cha": "HHZ",
-      "admin": "INTER"
+      "admin": "SUB"
     },
     {
       "lat": "-73.27",
@@ -304,7 +304,7 @@
       "sta": "LL6C",
       "loc": "00",
       "cha": "HHZ",
-      "admin": "INTER"
+      "admin": "SUB"
     }
   ]
 }

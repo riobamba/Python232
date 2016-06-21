@@ -19,10 +19,10 @@ def funcionamiento(entrada,fecha):
 
 def main1():
   hoy = datetime.now()
-  dias = timedelta(days=-21)
+  dias = timedelta(days=-173)
   ayer = hoy+dias
   
-  for x in xrange(1,20):
+  for x in xrange(1,174):
     d = timedelta(days=+x)
     ayer1=ayer+d
     fecha= ayer1.strftime("%Y-%m-%d")
@@ -32,7 +32,7 @@ def main1():
 
 
 #sched = BlockingScheduler()
-#sched.add_job(main1, 'cron', hour=05, minute=25)
+#sched.add_job(main1, 'cron', hour=05, m17nute=25)
 #sched.start()
 
 main1()
