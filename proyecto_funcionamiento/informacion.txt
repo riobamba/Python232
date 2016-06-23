@@ -29,6 +29,8 @@ para crear un web service, hasta el momento el tutorial funciona en cloud9
 http://www.django-rest-framework.org/tutorial/1-serialization/
 esto sirve para cuando se tiene llaves foraneas
 http://www.django-rest-framework.org/api-guide/relations/
+Ejempos de consultas con llaves foraneas y relaciones
+https://docs.djangoproject.com/en/1.9/topics/db/examples/
 
 <<<<<<< HEAD
 
