@@ -67,7 +67,10 @@ tabien se debe modificar el httpd.conf y verificar la carpeta de sites-avalibles
 >>>>>>> origin/master
 
 
+como trabajar con json en python
+http://robotfantastic.org/serializing-python-data-to-json-some-edge-cases.html
+
 consultar dos tablas en sqlite
-SELECT *
-FROM service_estacion se, service_service ss
-WHERE se.id = ss.estacion_id
+SELECT * FROM service_estacion se, service_funcionamiento ss WHERE se.id = ss.estacion_id
+SELECT estacion,latitud,longitud,administrador,fecha,valor FROM service_estacion se, service_funcionamiento ss WHERE ss.fecha BETWEEN "2016-01-01" AND "2016-01-02" AND se.id = ss.estacion_id and se.estacion="ANIL"
+
