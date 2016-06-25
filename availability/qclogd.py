@@ -19,16 +19,14 @@ def funcionamiento(entrada,fecha):
 
 def main1():
   hoy = datetime.now()
-  dias = timedelta(days=-173)
+  dias = timedelta(days=-177)
   ayer = hoy+dias
   
-  for x in xrange(1,174):
+  for x in xrange(153,178):
     d = timedelta(days=+x)
     ayer1=ayer+d
     fecha= ayer1.strftime("%Y-%m-%d")
     funcionamiento("stations.json",fecha)
-    funcionamiento("staacel.json",fecha)
-    funcionamiento("stainter.json",fecha)
 
 
 #sched = BlockingScheduler()

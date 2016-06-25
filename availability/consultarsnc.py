@@ -12,7 +12,7 @@ class WfqQuery(Client.Application):
 
   def __init__(self, argc, argv,fecha,entrada):
     self._fecha=fecha
-    print self._fecha
+    #print self._fecha
     self._entrada=entrada
     Client.Application.__init__(self, argc, argv)
     self.setPrimaryMessagingGroup("LISTENER_GROUP")
@@ -29,7 +29,7 @@ class WfqQuery(Client.Application):
     self._start=self._fecha+' 00:00:00'
     self._end=self._fecha+' 23:00:00'
     self._parameter= 'availability'
-    conn = sqlite3.connect('/var/qclogd/availability/disponibilidad.bd')
+    conn = sqlite3.connect('/var/qclogd/availability/availability.bd')
     cursor = conn.cursor()
     if not self.query():
       print "Sin conexion a la base de datos"
@@ -42,13 +42,13 @@ class WfqQuery(Client.Application):
     with open(self._entrada) as data_file:    
       result = json.load(data_file)
       for station in result['stations']:
-        net=str(station['net'])
-        sta=str(station['sta'])
-        loc=str(station['loc'])
-        cha=str(station['cha'])
-        lat=str(station['lat'])
-        lon=str(station['long'])
-        admin=str(station['admin'])
+        ide=str(station['id'])
+        sta=str(station['estacion'])
+        loc=str(station['localizador'])
+        cha=str(station['canal'])
+        lat=str(station['latitud'])
+        lon=str(station['longitud'])
+        net=str(station['red'])
         #print sta
         it = self.query().getWaveformQuality(DataModel.WaveformStreamID(net,sta,loc,cha, ""),
                                                        self._parameter,
@@ -64,12 +64,12 @@ class WfqQuery(Client.Application):
           it.step()
         val=(val/24)
         print sta+" "+str(val)
-        cursor.execute('''INSERT INTO service_service ('red','estacion','localizador','latitud','longitud','valor','administrador',fecha)
-                  VALUES(?,?,?,?,?,?,?,?)''', (net,sta,loc,lat,lon,str(val),admin,self._fecha))
+        cursor.execute('''INSERT INTO service_funcionamiento ('valor','fecha',estacion_id)  VALUES (?,?,?)''', (str(val),self._fecha,ide))
+
         #outfile.write(sta+" "+str(val)+"\n")
-               
+    conn.commit()           
     #outfile.close()
-    conn.commit()
+    
     print "TERMINADO"
     return True
 
