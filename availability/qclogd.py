@@ -7,32 +7,24 @@ import time
 import os
 
 
-def funcionamiento(entrada,fecha):
-  #hoy = datetime.now()
-  #dias = timedelta(days=-1)
-  #ayer = hoy+dias
-  #fecha= ayer.strftime("%Y-%m-%d")
+def funcionamiento(entrada):
+  hoy = datetime.now()
+  dias = timedelta(days=-1)
+  ayer = hoy+dias
+  fecha= ayer.strftime("%Y-%m-%d")
   print fecha
   app=consultarsnc.WfqQuery(len(sys.argv), sys.argv, fecha,entrada)
   app()
 
 
-def main1():
-  hoy = datetime.now()
-  dias = timedelta(days=-177)
-  ayer = hoy+dias
-  
-  for x in xrange(153,178):
-    d = timedelta(days=+x)
-    ayer1=ayer+d
-    fecha= ayer1.strftime("%Y-%m-%d")
-    funcionamiento("stations.json",fecha)
+def main():
+  funcionamiento("stations.json")
 
 
-#sched = BlockingScheduler()
-#sched.add_job(main1, 'cron', hour=05, m17nute=25)
-#sched.start()
 
-main1()
+sched = BlockingScheduler()
+sched.add_job(main, 'cron', hour=00, minute=05)
+sched.start()
+
 
 
