@@ -1,0 +1,88 @@
+Paso para poner a produccion un proyecto django
+1.Verificar la instalacion de Python y Django
+2.Instalar el modulo wsgi 
+http://www.webnivel.net/proyecto-de-django-a-produccion-con-apache/
+sudo aptitude install libapache2-mod-wsgi
+o
+sudo apt-get install libapache2-mod-wsgi-py3
+3.  sudo service apache2 restart
+
+4. sudo nano /etc/apache2/sites-available/domain1.conf
+
+WSGIPythonPath /var/www/domain1.com
+
+WSGIScriptAlias /prueba /var/www/domain1.com/MyTestProject/MyTestProject/wsgi.py
+
+<Directory /var/www/domain1.com/MyTestProject>
+<Files wsgi.py>
+        Require all granted
+</Files>
+</Directory>
+
+
+5. sudo a2ensite domain1.conf
+6. sudo /etc/init.d/apache2 reload
+7. modificar el wsgi.py para que pueda leer la ruta de settings
+
+
+import os
+import sys
+path = '/var/www/domain1.com/MyTestProject' """ESTA ES LA RUTA QUE SE DEBE INCLUIR"""
+if path not in sys.path:
+    sys.path.append(path)
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MyTestProject.settings")
+
+application = get_wsgi_application()
+
+8. tener en cuenta los permisos de acceso a la carpeta para que apache pueda tener acceso a
+el wsgi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+utilitarios
+
+instalar aptitude
+https://ubuntulife.wordpress.com/2010/10/12/sudo-apt-get-install-aptitude/
+sudo apt-get install aptitude
+
+Configura un servidor SSH en Ubuntu para acceder a tu equipo de forma remota
+http://www.redeszone.net/gnu-linux/servidor-ssh-en-ubuntu/
+sudo apt-get install openssh-server
+
+How to install pip on Ubuntu
+http://www.saltycrane.com/blog/2010/02/how-install-pip-ubuntu/
+sudo apt-get install python-pip python-dev build-essential 
+
+instalar Django
+pip install Django
+
+HTTPD - Servidor web Apache2
+sudo apt install apache2
+
+Instalar PHP
+https://www.digitalocean.com/community/tutorials/como-instalar-linux-apache-mysql-php-lamp-en-ubuntu-14-04-es
+
+version de python
+readlink -f $(which python) | xargs -I % sh -c 'echo -n "%: "; % -V'
