@@ -86,3 +86,9 @@ https://www.digitalocean.com/community/tutorials/como-instalar-linux-apache-mysq
 
 version de python
 readlink -f $(which python) | xargs -I % sh -c 'echo -n "%: "; % -V'
+
+documentacion de apache
+https://help.ubuntu.com/lts/serverguide/httpd.html
+
+documentacion deploy django con apache
+https://www.digitalocean.com/community/tutorials/using-mod_wsgi-to-serve-applications-on-ubuntu-12-04
