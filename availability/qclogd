@@ -1,0 +1,13 @@
+WSGIPythonPath /opt/seiscomp3/share/availability
+
+
+<Directory /opt/seiscomp3/share/availability/availability>
+        <Files wsgi.py>
+            Order deny,allow
+            Allow from all
+        </Files>
+</Directory>
+
+WSGIScriptAlias / /opt/seiscomp3/share/availability/availability/wsgi.py
+
+Alias /servicios /opt/seiscomp3/share/availability/

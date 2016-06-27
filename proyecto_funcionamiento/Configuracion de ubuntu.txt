@@ -38,20 +38,25 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MyTestProject.settings")
 application = get_wsgi_application()
 
 8. tener en cuenta los permisos de acceso a la carpeta para que apache pueda tener acceso a
-el wsgi
+el wsgi chmod -R 755 directorio/
+
+////////////////////
+Para el proyecto de disponibilidad no se tuvo en cuenta que el servidor .232 tenia la version 
+>>> import django
+>>> print(django.get_version())
+1.7.9
+y el proyecto fue echo para django 1.9 por lo que da un error en 
+ImportError: No module named security
+para solucionarlo se elimina la linea 'django.middleware.security.SecurityMiddleware',
+que esta en MIDDLEWARE_CLASSES, no es la solucion mas optima pero dado que se requiere que 
+funcione se procede de esta manera.
+
+Para poner en produccion se debe cambiar las lineas 
+DEBUG = False """False para que no muestre la consola de depuracion"""
+ALLOWED_HOSTS = ['10.100.100.232']"""Se debe colocar el diminio en el cual se ejecuta la app"""
 
 
-
-
-
-
-
-
-
-
-
-
-
+//////////////////////
 
 
 
