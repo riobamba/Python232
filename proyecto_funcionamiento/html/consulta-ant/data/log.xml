@@ -1,0 +1,1 @@
+http://10.100.100.232:8091/fdsnws/station/1/query?net=CM&sta=MON&loc=*&cha=HHN,HHE,HHZ&level=response&format=xml&includecomments=true&nodata=404

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Circles</title>
+    <style>
+    #map-canvas {
+    height: 500px;
+    width: 500px;
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script src="js/jquery-2.1.3.min.js"></script>
+		<script src="js/metro.js"></script>
+		<script src="js/consulta.js"></script>
+		<script src="js/prettify/run_prettify.js"></script>
+		<script src="js/select2.min.js"></script>
+		<script src="js/jquery.dataTables.min.js"></script>
+    
+	<script>
+	
+
+var url;
+var eventos= new Array();
+function initMapSismos() {
+ 
+  
+  var paramstr = window.location.search.substr(1);
+  url=paramstr.substr(2,paramstr.legend);
+	construirJson();
+  
+}
+
+function construirJson() {
+
+var cityPoints = {};
+
+
+	$.ajax({
+		url : url,
+		type : 'GET',
+		dataType : 'xml',
+		success : function(xml) {
+			var contenido="";
+			var id1=0;
+			
+			$(xml).find('event').each(function() {
+				var event = $(this);
+
+				var description = event.find("description");
+				var type = description.find("type").text();
+				var text = description.find("text").text();
+
+				var origin = event.find("origin");
+				var time = origin.find("time");
+				var timevalue = time.find("value").text();
+
+				var creationInfo = origin.find("creationInfo");
+				var author = creationInfo.find("author").text();
+
+				var latitude = origin.find("latitude");
+				var latitudevalue = latitude.find("value").text();
+
+				var longitude = origin.find("longitude");
+				var longitudevalue = longitude.find("value").text();
+
+				var depth = origin.find("depth");
+				var depthvalue = depth.find("value").text();
+
+				var magnitude = event.find("magnitude");
+				var typemag = magnitude.find("type").text();
+
+				var mag = magnitude.find("mag");
+				var valuemag = mag.find("value").text();
+				
+			var evento = new Array(latitudevalue, longitudevalue, defineRadio(valuemag),defineColor(depthvalue),timevalue,valuemag,typemag,depthvalue);
+			eventos.push(evento);     
+		
+			});
+			alert(eventos.length)
+			initialize();
+
+			
+		},
+
+		error : function(xhr, status) {
+			alert('Disculpe, existió un problema');
+		},
+
+		complete : function(xhr, status) {
+			// alert('Petición realizada');
+		}
+	});
+}
+
+var cityCircle;
+var infoWindow = new google.maps.InfoWindow();  
+
+function initialize() {
+
+  var mapOptions = {
+    zoom: 4,
+    center: new google.maps.LatLng(37.09024, -95.712891),
+    mapTypeId: google.maps.MapTypeId.TERRAIN
+  };
+
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+for (i in eventos) {
+var aux= eventos[i];
+var car = {lat:+aux[0], lng:+aux[1] };
+           var magnitudeOptions = {
+                map: map,
+                center: car,
+                radius: aux[2],
+                infoWindowIndex: i
+            };
+   cityCircle = new google.maps.Circle(magnitudeOptions);
+
+    google.maps.event.addListener(cityCircle, 'click', (function(cityCircle, i) {
+	var aux= eventos[i];
+	return function() {
+            infoWindow.setContent(aux[0]+"hola "+i);
+            infoWindow.setPosition(cityCircle.getCenter());
+            infoWindow.open(map);
+        }
+      })(cityCircle, i));
+}
+}
+google.maps.event.addDomListener(window, 'load', initMapSismos);
+
+
+function defineColor(prof1){
+	var prof=prof1/1000;
+	if(prof>0 && prof<=30){
+		return '#FF0000';
+	}else if(prof>=30 && prof<=60){
+		return '#DF3A01';
+	}else if(prof>=60 && prof<=150){
+		return '#FFFF00';
+	}else if(prof>=150 && prof<=300){
+		return '#04B404';
+	}else if(prof>=300 && prof<=700){
+		return '#0080FF';
+	}
+}
+
+function defineRadio(mag1){
+	var mag = parseFloat(mag1);
+	
+	if(mag>0 && mag<=3.9){
+		return 20000;
+	}else if(mag>=4 && mag<=4.9){
+		return 30000;
+	}else if(mag>=5 && mag<=5.9){
+		return 40000;
+	}else if(mag>=6 && mag<=6.9){
+		return 50000;
+	}else if(mag>=7 && mag<=7.9){
+		return 60000;
+	}
+}
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>

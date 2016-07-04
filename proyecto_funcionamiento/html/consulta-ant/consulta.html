@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+	<head lang="en">
+		<meta charset="UTF-8">
+
+		<!-- <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' /> -->
+		<title>Consulta de Eventos</title>
+
+		<link href="css/metro.css" rel="stylesheet">
+		<link href="css/metro-icons.css" rel="stylesheet">
+		<link href="css/metro-responsive.css" rel="stylesheet">
+		<link href="css/metro-schemes.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
+
+		<link href="css/docs.css" rel="stylesheet">
+
+		<script src="js/jquery-2.1.3.min.js"></script>
+		<script src="js/metro.js"></script>
+		<script src="js/consulta.js"></script>
+		<script src="js/prettify/run_prettify.js"></script>
+		<script src="js/select2.min.js"></script>
+		<script src="js/jquery.dataTables.min.js"></script>
+		
+
+		<script>
+			$(document).ready(function() {
+				cambio();
+				$('#sec_areas').hide();
+				$('#tabla_general').hide();
+
+			});
+
+			$(function() {
+				$(".js-select").select2({
+					placeholder : "Seleccione un tipo de Magnidtud",
+					allowClear : true
+				});
+			});
+
+		</script>
+		<script>
+		var dialog;
+			function showDialog(id) {
+				dialog = $("#" + id).data('dialog');
+				if (!dialog.element.data('opened')) {
+					dialog.open();
+					initMap();
+				} else {
+					dialog.close();
+				}
+			}
+
+			$(function() {
+
+				$('#n1 input[type=radio]').change(function() {
+					if ($(this).val() == "todos") {
+						$('#sec_areas').hide();
+						area = "todos";
+						cambio();
+					} else {
+						$('#sec_areas').show();
+						//initMap();
+						area = "area";
+						showDialog('dialog9');
+						
+					}
+
+				})
+			})
+			function cambio() {
+				construirConsulta();
+			}
+			
+			function cambio2() {
+				dialog.close();
+				construirConsulta();
+			}
+		</script>
+
+		<style>
+			#map {
+				height: 450px;
+				width: 450px;
+			}
+
+			#ruta {
+				height: 50%;
+				width: 100%;
+			}
+
+		</style>
+		<script>
+			var rectangle;
+			var map;
+			var infoWindow;
+
+			function initMap() {
+				map = new google.maps.Map(document.getElementById('map'), {
+					center : {
+						lat : 4.542903,
+						lng : -73.569119
+					},
+					zoom : 4
+				});
+
+				var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(0.5925817, -78.227), new google.maps.LatLng(8.918400, -68.4835));
+
+				// Define the rectangle and set its editable property to true.
+				rectangle = new google.maps.Rectangle({
+					bounds : bounds,
+					editable : true,
+					draggable : true
+				});
+
+				rectangle.setMap(map);
+				rectangle.addListener('bounds_changed', showNewRect);
+				infoWindow = new google.maps.InfoWindow();
+			}
+
+			function showNewRect(event) {
+				var ne = rectangle.getBounds().getNorthEast();
+				var sw = rectangle.getBounds().getSouthWest();
+
+				var contentString = '<b>Coordenadas</b><br>' + 'Latitud: ' + sw.lat() + ', ' + ne.lat() + '<br>' + 'Longitud: ' + sw.lng() + ', ' + ne.lng();
+				$("#latmin").val(sw.lat());
+				$("#latmax").val(ne.lat());
+				$("#lonmin").val(sw.lng());
+				$("#lonmax").val(ne.lng());
+				// Set the info window's content and position.
+				infoWindow.setContent(contentString);
+				infoWindow.setPosition(ne);
+
+				infoWindow.open(map);
+			}
+			
+			function alerta(){
+				alert("Funcionalidad en construcción ");
+			}
+			
+			function iniciarMapa(){
+				construirJson();
+				
+			}
+
+		</script>
+
+	</head>
+	<body>
+		<div class="container page-content">
+			<h1><a href="index.html" class="nav-button transform"><span></span></a>&nbsp;Consulta de Eventos </h1>
+
+			<h4>FDSNWS</h4>
+			<div class="example" data-text="General">
+				<div class="grid">
+					<div class="row cells1">
+						<span class="mif-info">Este servicio permite consultar los eventos registrados en la base de datos de SeisComp3, la respuesta está en formato XML bajo el estándar QuakeML. En el apartado Visualización encuentra ejemplos de cómo se puede procesar esta información.</span>
+						</div>
+					<div class="row cells4">
+						<div class="cell">
+							<label>Fecha Inicial</label>
+							<div class="input-control text full-size" >
+								<input type="text" value="" onchange="cambio()"  id="datetimepicker_mask"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Fecha Final</label>
+							<div class="input-control text full-size">
+								<input type="text" value="" onchange="cambio()" id="datetimepicker_mask1"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Profundidad Mínima</label>
+							<div class="input-control text full-size">
+								<input type="text" value="" onchange="cambio()" id="profundidad_minima"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Profundidad Máxima</label>
+							<div class="input-control text full-size">
+								<input type="text" value="" onchange="cambio()" id="profundidad_maxima"/>
+							</div>
+						</div>
+					</div>
+					<div class="row cells4">
+						<div class="cell">
+							<label>Magnitud Mínima</label>
+							<div class="input-control text full-size">
+								<input type="text" value="" onchange="cambio()" id="magnintud_minima"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Magnitud Máxima</label>
+							<div class="input-control text full-size">
+								<input type="text" value="" onchange="cambio()" id="magnitud_maxima"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Tipo Magnitud</label>
+							<select id="tipomag" onchange="cambio()" class="js-select full-size">
+								<option value=""></option>
+								<option value="MB">MB</option>
+								<option value="ML">ML</option>
+								<option value="MW">MW</option>
+
+							</select>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="example" data-text="Localización">
+				<div class="grid">
+					<div class="row cells4">
+						<div class="cell">
+							<br />
+							<fieldset id="n1">
+								<label class="input-control radio">
+									<input type="radio" name="n1" value="todos" checked >
+									<span class="check"></span> <span class="caption">Todos</span> </label>
+								<label class="input-control radio">
+									<input type="radio" name="n1" value="area">
+									<span class="check"></span> <span class="caption">Area</span> </label>
+							</fieldset>
+						</div>
+
+					</div>
+					<section id="sec_areas" >
+						<div class="row cells4">
+						<div class="cell">
+							<label>Latitud Minima</label>
+							<div class="input-control text full-size">
+								<input type="text" value=""  id="latmin"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Latitud Máxima</label>
+							<div class="input-control text full-size">
+								<input type="text" value=""  id="latmax"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Longitud Minima</label>
+							<div class="input-control text full-size">
+								<input type="text" value=""  id="lonmin"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Longitud Máxima</label>
+							<div class="input-control text full-size">
+								<input type="text" value=""  id="lonmax"/>
+							</div>
+						</div>
+					</div>
+						
+					</section>
+					
+
+				</div>
+
+			</div>
+			<div class="example" data-text="Consulta">
+				<div class="row cells">
+					<div class="cell">
+						<label>Haga clic en el enlace:</label>
+						
+					</div>
+					<br />
+					<div class="cell">
+						<div   id="ruta" >
+						</div>
+						<br />
+						<br />
+					</div>
+					
+					
+
+				</div>
+			</div>
+			
+			<div class="example" data-text="Visualización">
+				<div class="row cells">
+					<br />
+					<div class="cell">
+						<button onclick="ejecutarConsulta()" class="button success">Ver en Tabla</button>	
+						<button id="iniciarMapa" onclick="iniciarMapa()" class="button success">Ver en Mapa</button>					
+					</div>
+					<br />
+					<span class="mif-info">Nota: La información del XML también puede ser procesada para generar Mapas, Graficas entre otras.</span>
+					
+
+				</div>
+			</div>
+		</div>
+
+		<div data-role="dialog" id="dialog9" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
+			<h3>Seleccione el área para la consulta </h3>
+			<section id="sec_mapa" >
+				<div id="map"></div>
+				<button onclick="cambio2()" class="button success">Listo</button>
+			</section>
+		</div>
+		
+		
+		<div class="example" data-text="tabla" id="tabla_general">
+            <table id="example_table" class="table striped hovered cell-hovered border bordered">
+                <thead>
+                <tr>
+                	<th>Estado</th>
+                    <th>Descripcion</th>
+                    <th>Fecha</th>
+                    <th>Autor</th>
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+                    <th>Profundidad</th>
+                    <th>Tipo Magnitud</th>
+                    <th>Magnitud</th>
+                </tr>
+                </thead>
+
+                <tfoot>
+                <tr>
+                	<th>Estado</th>
+                    <th>Descripcion</th>
+                    <th>Fecha</th>
+                    <th>Autor</th>
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+                    <th>Profundidad</th>
+                    <th>Tipo Magnitud</th>
+                    <th>Magnitud</th>
+                </tr>
+                </tfoot>
+
+                <tbody id="tabla">
+                
+                
+                </tbody>
+            </table>
+            
+            <section id="sec_mapa2" >
+				<div id="map2"></div>
+				
+			</section>
+        </div> <!-- End of example table -->
+		<script src="js/jquery.datetimepicker.js"></script>
+		<script src="js/datepikeroptions.js"></script>
+
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRhxOtAXhSi0xoKflXvdywogocAFzNoCc&callback=initMap"
+		async defer></script>
+	</body>
+</html>

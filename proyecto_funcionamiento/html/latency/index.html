@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+                <meta charset="utf-8">
+                <title>Funcionamiento</title>
+                <link href="css/metro.css" rel="stylesheet">
+                <link href="css/metro-icons.css" rel="stylesheet">
+                <link href="css/metro-responsive.css" rel="stylesheet">
+                <link href="css/metro-schemes.css" rel="stylesheet">
+                <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
+
+                <link href="css/docs.css" rel="stylesheet">
+
+                <script src="js/jquery-2.1.3.min.js"></script>
+                <script src="js/metro.js"></script>
+                <script src="js/prettify/run_prettify.js"></script>
+                <script src="js/select2.min.js"></script>
+                <script src="js/jquery.dataTables.min.js"></script>
+                <script src="js/allstations.js"></script>
+   
+        </head>
+        <script >
+ $( document ).ready(function() {
+    $('#carga').hide();
+});          
+
+   
+
+function iniciar(){
+     $("#sub").html("")
+     $("#subl").html("")
+     $("#rsnc").html("")
+     $("#rsncl").html("")
+     $("#rsnc").html("")
+     $("#rsncl").html("")
+     $("#rnac").html("")
+     $("#rnacl").html("")
+     $("#inter").html("")
+     $("#interl").html("")
+     $("#subp").html("")
+     $("#rsncp").html("")
+     $("#rnacp").html("")
+     $("#interp").html("")
+
+    $('#carga').show();
+
+    $( "#ini" ).prop( "disabled", true );
+
+var fe=$("#fecha").val();
+fe=fe.replace(".","-");
+fe=fe.replace(".","-");
+consulta_allstations(fe);
+}
+  
+        </script>
+        <body>
+
+<h4>FUNCIONAMIENTO ESTACIONES</h4>
+            <div class="example" data-text="">
+                <div class="grid">
+                    <div class="row cells1">
+                        
+                    <div class="row cells4">
+                        <div class="cell">
+                            <label>Fecha </label>
+                            <div class="input-control text" data-role="datepicker">
+                                <input type="text" id="fecha">
+                                <button class="button"><span class="mif-calendar"></span></button>
+                            </div> 
+                        </div>
+                        <div class="cell">
+                            <button class="button primary" id="ini" onclick="iniciar()">Consultar</button>
+                        </div>
+                        <div class="cell">
+                            <div id="carga" data-role="preloader" data-type="cycle" data-style="color"></div>
+                        </div>
+                        <div class="cell">
+			<a href="php/descarga.php">Descargar Datos</a>                            
+                        </div>
+                    </div>
+                    <div class="row cells4">
+                        <div class="cell">
+                            
+                        </div>
+                        <div class="cell">
+                            
+                        </div>
+                        <div class="cell">
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+
+
+            <div class="example" data-text="">
+                <div class="grid">
+                    <div class="row cells1">
+                        
+                    <div class="row cells3">
+                        <div class="cell">
+                            <h5>RSNC</h5>
+                            <div id="rsnc"></div>
+                            <br>
+                            <h5>RNAC</h5>
+                            <div id="rnac"></div>
+                            <br>
+                            <h5>INTERNACIONALES</h5>
+                            <div id="inter"></div>
+                            <br>
+                            <h5>SUBREDES</h5>
+                            <div id="sub"></div>
+                        </div>
+                        <div class="cell">
+                            <h5>RSNC</h5>
+                            <div id="rsncl"></div>
+                            <br>
+                            <h5>RNAC</h5>
+                            <div id="rnacl"></div>
+                            <br>
+                            <h5>INTERNACIONALES</h5>
+                            <div id="interl"></div>
+                            <br>
+                            <h5>SUBREDES</h5>
+                            <div id="subl"></div>
+                        </div>
+                        <div class="cell">
+                            <h5>%</h5>
+                            <div id="rsncp"></div>
+                            <br>
+                            <h5>%</h5>
+                            <div id="rnacp"></div>
+                            <br>
+                            <h5>%</h5>
+                            <div id="interp"></div>
+                            <br>
+                            <h5>%</h5>
+                            <div id="subp"></div>
+                        </div>
+                        
+                    </div>
+                 
+
+                </div>
+            </div>
+            </div>
+
+
+        
+
+
+        </body>
+        </html>
+

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+	<head lang="en">
+		<meta charset="UTF-8">
+
+		<!-- <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' /> -->
+		<title>Consulta de Forma de Onda</title>
+
+		<link href="css/metro.css" rel="stylesheet">
+		<link href="css/metro-icons.css" rel="stylesheet">
+		<link href="css/metro-responsive.css" rel="stylesheet">
+		<link href="css/metro-schemes.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
+
+		<link href="css/docs.css" rel="stylesheet">
+
+		<script src="js/jquery-2.1.3.min.js"></script>
+		<script src="js/metro.js"></script>
+		<script src="js/onda.js"></script>
+		<script src="js/prettify/run_prettify.js"></script>
+		<script src="js/select2.min.js"></script>
+		<script src="js/jquery.dataTables.min.js"></script>
+
+		<script>
+			var estacion;
+			$(document).ready(function() {
+				$("#datos1").change(function() {
+
+					estacion = "";
+					$("#datos1 option:selected").each(function() {
+						estacion += $(this).text() + ",";
+					});
+					estacion = "sta=" + estacion.substring(0, estacion.length - 1) + "&";
+					//alert(texto);
+
+				}).trigger('change');
+			});
+
+			function cambioOnda() {
+				construirConsultaOnda();
+
+			}
+
+			// function datos(){
+			// alert("entra");
+			// $('#datos1').change(function(){
+			// alert($(this).val());
+			//
+			// });
+			// }
+
+		</script>
+
+	</head>
+	<body>
+		<div class="container page-content">
+			<h1><a href="index.html" class="nav-button transform"><span></span></a>&nbsp;Forma de Onda </h1>
+
+			<h4>FDSNWS</h4>
+			<div class="example" data-text="General">
+				<div class="grid">
+					<div class="row cells1">
+						<span class="mif-info">Este servicio permite hacer una extracción de la base de datos de SeisComp3 en formato mseed, la extracción puede contener  todas las estaciones (Opción Todas del apartado Estación) o solo las requeridas, también puede seleccionar todos los canales (Opción Todos del apartado Canal) o solo el de su interés.</span>
+						</div>
+					<div class="row cells4">
+						<div class="cell">
+							<label>Fecha Inicial</label>
+							<div class="input-control text full-size" >
+								<input type="text" value="" onchange="cambioOnda()"  id="dateinionda"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Fecha Final</label>
+							<div class="input-control text full-size">
+								<input type="text" value="" onchange="cambioOnda()" id="datefinonda"/>
+							</div>
+						</div>
+
+						<div class="cell">
+							<label>Canal</label>
+							<div class="input-control text full-size">
+								<select id="canal" onchange="cambioOnda()" class="js-select full-size">
+								<option value=""></option>
+								<option value="*">Todos</option>
+								<option value="?HZ">Z</option>
+								<option value="?HN">N</option>
+								<option value="?HE">E</option>
+								<option value="BHZ">BHZ</option>
+								<option value="BHN">BHN</option>
+								<option value="BHE">BHE</option>
+								<option value="HHZ">HHZ</option>
+								<option value="HHN">HHN</option>
+								<option value="HHE">HHE</option>
+
+							</select>
+							</div>
+						</div>
+					</div>
+					<div class="row cells1">
+						<div class="cell">
+							<label>Estacion</label>
+							<div class="input-control text full-size">
+								<!-- <input type="text" value="" onchange="cambioOnda()" id="estacion"/> -->
+								<div class="input-control full-size" onchange="cambioOnda()" data-role="select" data-multiple="true" data-placeholder="Selecciones una estacion">
+									<select class="full-size" id="datos1" >
+										<option value="Todas">Todas</option>
+										<option value="BAR2">BAR2</option>
+										<option value="BBAC">BBAC</option>
+										<option value="BET">BET</option>
+										<option value="BET">BET</option>
+										<option value="BRR">BRR</option>
+										<option value="CAP2">CAP2</option>
+										<option value="CBOC">CBOC</option>
+										<option value="CHI">CHI</option>
+										<option value="CRJC">CRJC</option>
+										<option value="CRU">CRU</option>
+										<option value="CUM">CUM</option>
+										<option value="DBB">DBB</option>
+										<option value="ELA">ELA</option>
+										<option value="FLO2">FLO2</option>
+										<option value="GARC">GARC</option>
+										<option value="GCUF">GCUF</option>
+										<option value="GR1C">GR1C</option>
+										<option value="GUA">GUA</option>
+										<option value="GUY2C">GUY2C</option>
+										<option value="HEL">HEL</option>
+										<option value="IMO">IMO</option>
+										<option value="IPA">IPA</option>
+										<option value="LCBC">LCBC</option>
+										<option value="LL1C">LL1C</option>
+										<option value="LL5C">LL5C</option>
+										<option value="LL6C">LL6C</option>
+										<option value="MACC">MACC</option>
+										<option value="MAL">MAL</option>
+										<option value="MAP">MAP</option>
+										<option value="MARA">MARA</option>
+										<option value="MON">MON</option>
+										<option value="NOR">NOR</option>
+										<option value="OCA">OCA</option>
+										<option value="ORTC">ORTC</option>
+										<option value="PAL">PAL</option>
+										<option value="PAM">PAM</option>
+										<option value="PCON">PCON</option>
+										<option value="PIZC">PIZC</option>
+										<option value="POP2">POP2</option>
+										<option value="PRA">PRA</option>
+										<option value="PRV">PRV</option>
+										<option value="PTA">PTA</option>
+										<option value="PTB">PTB</option>
+										<option value="PTGC">PTGC</option>
+										<option value="PTLC">PTLC</option>
+										<option value="RGC">RGC</option>
+										<option value="ROSC">ROSC</option>
+										<option value="RUS">RUS</option>
+										<option value="SJC">SJC</option>
+										<option value="SMAR">SMAR</option>
+										<option value="SML">SML</option>
+										<option value="SOL">SOL</option>
+										<option value="SOTA">SOTA</option>
+										<option value="SPBC">SPBC</option>
+										<option value="TAM">TAM</option>
+										<option value="TOL">TOL</option>
+										<option value="TUM">TUM</option>
+										<option value="URE">URE</option>
+										<option value="URI">URI</option>
+										<option value="VIL">VIL</option>
+										<option value="YOT">YOT</option>
+										<option value="ZAR">ZAR</option>
+										<option value="REAC">REAC</option>
+										<option value="AUA1">AUA1</option>
+										<option value="AZU ">AZU </option>
+										<option value="BCIP">BCIP</option>
+										<option value="CACAO">CACAO</option>
+										<option value="CAPV">CAPV</option>
+										<option value="CASC">CASC</option>
+										<option value="CUSE ">CUSE </option>
+										<option value="DABV">DABV</option>
+										<option value="ELOV">ELOV</option>
+										<option value="GMAL">GMAL</option>
+										<option value="GTBY">GTBY</option>
+										<option value="JTS">JTS</option>
+										<option value="LPAZ">LPAZ</option>
+										<option value="MTDJ">MTDJ</option>
+										<option value="OTAV">OTAV</option>
+										<option value="PAC1">PAC1</option>
+										<option value="PAYG">PAYG</option>
+										<option value="PNME">PNME</option>
+										<option value="PTGA">PTGA</option>
+										<option value="PTGL">PTGL</option>
+										<option value="PTP">PTP</option>
+										<option value="SAML">SAML</option>
+										<option value="SDDR">SDDR</option>
+										<option value="SDV">SDV</option>
+										<option value="SJG">SJG</option>
+										<option value="SOCV">SOCV</option>
+										<option value="TBTG">TBTG</option>
+										<option value="TEIG">TEIG</option>
+										<option value="TGUH">TGUH</option>
+										<option value="TULM">TULM</option>
+										<option value="UPA">UPA</option>
+										<option value="UPD2">UPD2</option>
+										
+									</select>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="example" data-text="Consulta">
+				<div class="row cells">
+					<div class="cell">
+						<label>Haga clic en el enlace:</label>
+
+					</div>
+					<br />
+					<div class="cell">
+						<div   id="rutaonda" ></div>
+						<br />
+						<br />
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<script src="js/jquery.datetimepicker.js"></script>
+		<script src="js/dateonda.js"></script>
+
+	</body>
+</html>
