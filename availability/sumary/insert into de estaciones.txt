@@ -125,3 +125,25 @@ INSERT INTO service_estacion (longitud,latitud,red,estacion,localizador,administ
 INSERT INTO service_estacion (longitud,latitud,red,estacion,localizador,administrador,canal)  VALUES("-73.56","9.54","CM","LL1C","00","SUB","HHZ");
 INSERT INTO service_estacion (longitud,latitud,red,estacion,localizador,administrador,canal)  VALUES("-73.72","9.75","CM","LL5C","00","SUB","HHZ");
 INSERT INTO service_estacion (longitud,latitud,red,estacion,localizador,administrador,canal)  VALUES("-73.27","9.74","CM","LL6C","00","SUB","HHZ");
+{"id:"128,"estacion":"ACON","red": "NU","latitud": "11.968","localizador": "","longitud": "-85.174","administrador": "INTER","canal": "BHZ"},
+{"id:"129,"estacion":"ANWB","red": "CU","latitud": "17.66853","localizador": "0","longitud": "-61.78557","administrador": "INTER","canal": "BHZ"},
+{"id:"130,"estacion":"BBGH","red": "CU","latitud": "13.1434","localizador": "20","longitud": "-59.5588","administrador": "INTER","canal": "LN2"},
+{"id:"131,"estacion":"BONI","red": "EC","latitud": "0.4528","localizador": "","longitud": "-77.5297","administrador": "INTER","canal": "HHN"},
+{"id:"132,"estacion":"CNGN","red": "NU","latitud": "12.5","localizador": "","longitud": "-86.6985","administrador": "INTER","canal": "BHZ"},
+{"id:"133,"estacion":"COHC","red": "EC","latitud": "-2.4661","localizador": "","longitud": "-79.2574","administrador": "INTER","canal": "HHN"},
+{"id:"134,"estacion":"CRIN","red": "NU","latitud": "12.696167","localizador": "","longitud": "-87.0315","administrador": "INTER","canal": "BHZ"},
+{"id:"135,"estacion":"FLF1","red": "EC","latitud": "-0.35743","localizador": "","longitud": "-79.84268","administrador": "INTER","canal": "HHN"},
+{"id:"136,"estacion":"GRGR","red": "CU","latitud": "12.1324","localizador": "0","longitud": "-61.654","administrador": "INTER","canal": "BH1"},
+{"id:"137,"estacion":"GRTK","red": "CU","latitud": "21.51149","localizador": "0","longitud": "-71.1327","administrador": "INTER","canal": "BH2"},
+{"id:"138,"estacion":"PPLP","red": "EC","latitud": "-1.5451","localizador": "","longitud": "-80.775","administrador": "INTER","canal": "HHZ"},
+{"id:"139,"estacion":"MASN","red": "NU","latitud": "12.00283","localizador": "","longitud": "-86.01491","administrador": "INTER","canal": "BHZ"},
+{"id:"140,"estacion":"SDV","red": "IU","latitud": "8.8839","localizador": "0","longitud": "-70.634","administrador": "INTER","canal": "BHZ"},
+{"id:"141,"estacion":"SJG","red": "IU","latitud": "18.1091","localizador": "0","longitud": "-66.15","administrador": "INTER","canal": "BHZ"},
+{"id:"142,"estacion":"SAML","red": "IU","latitud": "-8.9489","localizador": "0","longitud": "-63.1831","administrador": "INTER","canal": "BH1"},
+{"id:"143,"estacion":"PTGA","red": "IU","latitud": "-0.7308","localizador": "0","longitud": "-59.9666","administrador": "INTER","canal": "BH1"},
+{"id:"144,"estacion":"JTS","red": "II","latitud": "10.2908","localizador": "0","longitud": "-84.9525","administrador": "INTER","canal": "BH1"},
+{"id:"145,"estacion":"NNA","red": "II","latitud": "-11.9875","localizador": "10","longitud": "-76.8422","administrador": "INTER","canal": "BH2"},
+{"id:"146,"estacion":"AUCA","red": "EC","latitud": "-0.55","localizador": "","longitud": "-76.9","administrador": "INTER","canal": "HHE"},
+{"id:"147,"estacion":"PTGL","red": "EC","latitud": "0.78153","localizador": "1","longitud": "-80.03037","administrador": "INTER","canal": "HHE"},
+{"id:"148,"estacion":"MCRA","red": "EC","latitud": "-4.3697","localizador": "","longitud": "-79.9544","administrador": "INTER","canal": "HHE"},
+{"id:"149,"estacion":"PIAT","red": "EC","latitud": "-0.9771","localizador": "","longitud": "-78.2616","administrador": "INTER","canal": "BLE"}
