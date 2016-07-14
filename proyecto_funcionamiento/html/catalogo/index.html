@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+	<head lang="en">
+		<meta charset="UTF-8">
+
+		<!-- <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' /> -->
+		<title>Consulta de Eventos</title>
+
+		<link href="css/metro.css" rel="stylesheet">
+		<link href="css/metro-icons.css" rel="stylesheet">
+		<link href="css/metro-responsive.css" rel="stylesheet">
+		<link href="css/metro-schemes.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
+
+		<link href="css/docs.css" rel="stylesheet">
+
+		<script src="js/jquery-2.1.3.min.js"></script>
+		<script src="js/metro.js"></script>
+		<script src="js/consulta.js"></script>
+		<script src="js/prettify/run_prettify.js"></script>
+		<script src="js/select2.min.js"></script>
+		<script src="js/jquery.dataTables.min.js"></script>
+		
+
+		<script>
+			var area;
+			$(document).ready(function() {
+				cambio();
+				$('#sec_areas').hide();
+				$('#sec_circulo').hide();
+				$('#tabla_general').hide();
+
+			});
+
+			$(function() {
+				$(".js-select").select2({
+					placeholder : "Seleccione un tipo de Magnidtud",
+					allowClear : true
+				});
+			});
+
+		</script>
+		<script>
+		var dialog;
+			function showDialog(id) {
+				dialog = $("#" + id).data('dialog');
+				if (!dialog.element.data('opened')) {
+					dialog.open();
+					initMap();
+				} else {
+					dialog.close();
+				}
+			}
+
+			$(function() {
+
+				$('#n1 input[type=radio]').change(function() {
+					if ($(this).val() == "todos") {
+						$('#sec_areas').hide();
+						$('#sec_circulo').show();
+						area = "todos";
+						showDialog('dialog9');
+						//cambio();
+					} else {
+						$('#sec_circulo').hide();
+						$('#sec_areas').show();
+						//initMap();
+						area = "area";
+						showDialog('dialog9');
+						
+					}
+
+				})
+			})
+			function cambio() {
+				construirConsulta();
+			}
+			
+			function cambio2() {
+				dialog.close();
+				construirConsulta();
+			}
+		</script>
+
+		<style>
+			#map {
+				height: 450px;
+				width: 700px;
+			}
+
+			#ruta {
+				height: 50%;
+				width: 100%;
+			}
+
+		</style>
+		<script>
+			var rectangle;
+			var map;
+			var infoWindow;
+			var citymap = {
+				Bogota: {
+					center: {lat: 4.6667, lng: -74.082}
+				}
+			};
+
+			function initMap() {
+				map = new google.maps.Map(document.getElementById('map'), {
+					center : {
+						lat : 4.542903,
+						lng : -73.569119
+					},
+					zoom : 4
+				});
+
+				var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(0.5925817, -78.227), new google.maps.LatLng(8.918400, -68.4835));
+
+				// Define the rectangle and set its editable property to true.
+				if(area=="area"){
+					rectangle = new google.maps.Rectangle({
+						strokeColor: '#FF0000',
+						strokeOpacity: 0.8,
+						strokeWeight: 2,
+						fillColor: '#FF0000',
+						fillOpacity: 0.35,
+						bounds : bounds,
+						editable : true,
+						draggable : true
+					});
+
+					rectangle.setMap(map);
+					rectangle.addListener('bounds_changed', showNewRect);
+					infoWindow = new google.maps.InfoWindow();
+				}else{
+					for (var city in citymap) {
+						// Add the circle for this city to the map.
+						var cityCircle = new google.maps.Circle({
+							strokeColor: '#FF0000',
+							strokeOpacity: 0.8,
+							strokeWeight: 2,
+							fillColor: '#FF0000',
+							fillOpacity: 0.35,
+							map: map,
+							center: citymap[city].center,
+							radius: 1000000,
+							editable : true,
+							draggable : true
+						});
+					}
+				}
+
+			}
+
+
+
+			function showNewRect(event) {
+				var ne = rectangle.getBounds().getNorthEast();
+				var sw = rectangle.getBounds().getSouthWest();
+
+				var contentString = '<b>Coordenadas</b><br>' + 'Latitud: ' + sw.lat() + ', ' + ne.lat() + '<br>' + 'Longitud: ' + sw.lng() + ', ' + ne.lng();
+				$("#latmin").val(sw.lat());
+				$("#latmax").val(ne.lat());
+				$("#lonmin").val(sw.lng());
+				$("#lonmax").val(ne.lng());
+				// Set the info window's content and position.
+				infoWindow.setContent(contentString);
+				infoWindow.setPosition(ne);
+
+				infoWindow.open(map);
+			}
+			
+			function alerta(){
+				alert("Funcionalidad en construcción ");
+			}
+			
+			function iniciarMapa(){
+				construirJson();
+				
+			}
+
+			$(function(){
+				$("#accordion").accordion();
+			});
+
+		</script>
+
+	</head>
+	<body>
+		<div class="container page-content">
+			<h1><a href="." ><span></span></a>&nbsp;Catalogo de Eventos </h1>
+			<div class="example" >
+				<div class="grid">
+
+					<div class="row cells5">
+
+						<div class="cell">
+							<label>Fecha Inicial(*)</label>
+							<div class="input-control text full-size" >
+								<input type="text" value="" onchange="cambio()"  id="datetimepicker_mask"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Fecha Final(*)</label>
+							<div class="input-control text full-size">
+								<input type="text" value="" onchange="cambio()" id="datetimepicker_mask1"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Magnitud Mínima</label>
+							<div class="input-control text full-size">
+								<input type="text" value="" onchange="cambio()" id="magnintud_minima"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Magnitud Máxima</label>
+							<div class="input-control text full-size">
+								<input type="text" value="" onchange="cambio()" id="magnitud_maxima"/>
+							</div>
+						</div>
+						<div class="cell">
+							<label>Tipo Magnitud</label>
+							<select id="tipomag" onchange="cambio()" class="js-select full-size">
+								<option value=""></option>
+								<option value="MB">Todas</option>
+								<option value="MB">MB</option>
+								<option value="ML">ML</option>
+								<option value="MW">MW</option>
+
+							</select>
+						</div>
+					</div>
+
+					<div class="row cells2">
+						<div class="cell">
+							<label>Departamento</label>
+							<select name="departamento" class="js-select full-size">
+								<option selected="" value="DEPARTAMENTO">SELECCIONE DEPARTAMENTO </option>
+								<option value="AMAZONAS">AMAZONAS</option><option value="ANTIOQUIA">ANTIOQUIA</option><option value="ARAUCA">ARAUCA</option><option value="ARCHIPIELAGO_DE_SAN_ANDRES._PROV._Y_STA_CATALINA">ARCHIPIELAGO DE SAN ANDRES. PROV. Y STA CATALINA</option><option value="ATLANTICO">ATLANTICO</option><option value="BOLIVAR">BOLIVAR</option><option value="BOYACA">BOYACA</option><option value="CALDAS">CALDAS</option><option value="CAQUETA">CAQUETA</option><option value="CASANARE">CASANARE</option><option value="CAUCA">CAUCA</option><option value="CESAR">CESAR</option><option value="CHOCO">CHOCO</option><option value="CORDOBA">CORDOBA</option><option value="CUNDINAMARCA">CUNDINAMARCA</option><option value="GUAINIA">GUAINIA</option><option value="GUAVIARE">GUAVIARE</option><option value="HUILA">HUILA</option><option value="LA_GUAJIRA">LA GUAJIRA</option><option value="MAGDALENA">MAGDALENA</option><option value="META">META</option><option value="NARINO">NARINO</option><option value="NORTE_DE_SANTANDER">NORTE DE SANTANDER</option><option value="PUTUMAYO">PUTUMAYO</option><option value="QUINDIO">QUINDIO</option><option value="RISARALDA">RISARALDA</option><option value="SANTANDER">SANTANDER</option><option value="SUCRE">SUCRE</option><option value="TOLIMA">TOLIMA</option><option value="VALLE_DEL_CAUCA">VALLE DEL CAUCA</option><option value="VAUPES">VAUPES</option><option value="VICHADA">VICHADA</option><option value="ZONA_GEOGRAFICA_ESPECIAL">ZONA GEOGRAFICA ESPECIAL</option><option selected="" value="DEPARTAMENTO">SELECCIONE DEPARTAMENTO</option>       	         </select>
+						</div>
+						<div class="cell">
+							<label>Municipio</label>
+							<select name="municipio" class="js-select full-size">
+								<option selected="" value="MUNICIPIO">SELECCIONE MUNICIPIO </option>
+								<option value="AGUA_DE_DIOS">AGUA DE DIOS</option><option value="ALBAN">ALBAN</option><option value="ANAPOIMA">ANAPOIMA</option><option value="ANOLAIMA">ANOLAIMA</option><option value="APULO">APULO</option><option value="ARBELAEZ">ARBELAEZ</option><option value="BELTRAN">BELTRAN</option><option value="BITUIMA">BITUIMA</option><option value="BOGOTA.Distrito_Capital">BOGOTA.Distrito Capital</option><option value="BOJACA">BOJACA</option><option value="CABRERA">CABRERA</option><option value="CACHIPAY">CACHIPAY</option><option value="CAJICA">CAJICA</option><option value="CAPARRAPI">CAPARRAPI</option><option value="CAQUEZA">CAQUEZA</option><option value="CARMEN_DE_CARUPA">CARMEN DE CARUPA</option><option value="CHAGUANI">CHAGUANI</option><option value="CHIA">CHIA</option><option value="CHIPAQUE">CHIPAQUE</option><option value="CHOACHI">CHOACHI</option><option value="CHOCONTA">CHOCONTA</option><option value="COGUA">COGUA</option><option value="COTA">COTA</option><option value="CUCUNUBA">CUCUNUBA</option><option value="EL_COLEGIO">EL COLEGIO</option><option value="EL_PENON">EL PENON</option><option value="EL_ROSAL">EL ROSAL</option><option value="FACATATIVA">FACATATIVA</option><option value="FOMEQUE">FOMEQUE</option><option value="FOSCA">FOSCA</option><option value="FUNZA">FUNZA</option><option value="FUQUENE">FUQUENE</option><option value="FUSAGASUGA">FUSAGASUGA</option><option value="GACHALA">GACHALA</option><option value="GACHANCIPA">GACHANCIPA</option><option value="GACHETA">GACHETA</option><option value="GAMA">GAMA</option><option value="GIRARDOT">GIRARDOT</option><option value="GRANADA">GRANADA</option><option value="GUACHETA">GUACHETA</option><option value="GUADUAS">GUADUAS</option><option value="GUASCA">GUASCA</option><option value="GUATAQUI">GUATAQUI</option><option value="GUATAVITA">GUATAVITA</option><option value="GUAYABAL_DE_SIQUIMA">GUAYABAL DE SIQUIMA</option><option value="GUAYABETAL">GUAYABETAL</option><option value="GUTIERREZ">GUTIERREZ</option><option value="JERUSALEN">JERUSALEN</option><option value="JUNIN">JUNIN</option><option value="LA_CALERA">LA CALERA</option><option value="LA_MESA">LA MESA</option><option value="LA_PALMA">LA PALMA</option><option value="LA_PENA">LA PENA</option><option value="LA_VEGA">LA VEGA</option><option value="LENGUAZAQUE">LENGUAZAQUE</option><option value="MACHETA">MACHETA</option><option value="MADRID">MADRID</option><option value="MANTA">MANTA</option><option value="MEDINA">MEDINA</option><option value="MOSQUERA">MOSQUERA</option><option value="NARINO">NARINO</option><option value="NEMOCON">NEMOCON</option><option value="NILO">NILO</option><option value="NIMAIMA">NIMAIMA</option><option value="NOCAIMA">NOCAIMA</option><option value="PACHO">PACHO</option><option value="PAIME">PAIME</option><option value="PANDI">PANDI</option><option value="PARATEBUENO">PARATEBUENO</option><option value="PASCA">PASCA</option><option value="PUERTO_SALGAR">PUERTO SALGAR</option><option value="PULI">PULI</option><option value="QUEBRADANEGRA">QUEBRADANEGRA</option><option value="QUETAME">QUETAME</option><option value="QUIPILE">QUIPILE</option><option value="RICAURTE">RICAURTE</option><option value="SAN_ANTONIO_DEL_TEQUENDAMA">SAN ANTONIO DEL TEQUENDAMA</option><option value="SAN_BERNARDO">SAN BERNARDO</option><option value="SAN_CAYETANO">SAN CAYETANO</option><option value="SAN_FRANCISCO">SAN FRANCISCO</option><option value="SAN_JUAN_DE_RIOSECO">SAN JUAN DE RIOSECO</option><option value="SASAIMA">SASAIMA</option><option value="SESQUILE">SESQUILE</option><option value="SIBATE">SIBATE</option><option value="SILVANIA">SILVANIA</option><option value="SIMIJACA">SIMIJACA</option><option value="SOACHA">SOACHA</option><option value="SOPO">SOPO</option><option value="SUBACHOQUE">SUBACHOQUE</option><option value="SUESCA">SUESCA</option><option value="SUPATA">SUPATA</option><option value="SUSA">SUSA</option><option value="SUTATAUSA">SUTATAUSA</option><option value="TABIO">TABIO</option><option value="TAUSA">TAUSA</option><option value="TENA">TENA</option><option value="TENJO">TENJO</option><option value="TIBACUY">TIBACUY</option><option value="TIBIRITA">TIBIRITA</option><option value="TOCAIMA">TOCAIMA</option><option value="TOCANCIPA">TOCANCIPA</option><option value="TOPAIPI">TOPAIPI</option><option value="UBALA">UBALA</option><option value="UBAQUE">UBAQUE</option><option value="UBATE">UBATE</option><option value="UNE">UNE</option><option value="UTICA">UTICA</option><option value="VENECIA">VENECIA</option><option value="VERGARA">VERGARA</option><option value="VIANI">VIANI</option><option value="VILLAGOMEZ">VILLAGOMEZ</option><option value="VILLAPINZON">VILLAPINZON</option><option value="VILLETA">VILLETA</option><option value="VIOTA">VIOTA</option><option value="YACOPI">YACOPI</option><option value="ZIPACON">ZIPACON</option><option value="ZIPAQUIRA">ZIPAQUIRA</option>       	        </select>
+						</div>
+					</div>
+
+				</div>
+				<div class="accordion" id="accordion">
+					<div class="frame">
+						<div class="heading">Opciones avanzadas </div>
+						<div class="content">
+							<div class="grid">
+							<div class="row cells3">
+								<div class="cell">
+									<label>Profundidad Mínima</label>
+									<div class="input-control text full-size">
+										<input type="text" value="" onchange="cambio()" id="profundidad_minima"/>
+									</div>
+								</div>
+								<div class="cell">
+									<label>Profundidad Máxima</label>
+									<div class="input-control text full-size">
+										<input type="text" value="" onchange="cambio()" id="profundidad_maxima"/>
+									</div>
+								</div>
+								<div class="cell">
+									<div class="grid">
+										<div class="row cells1">
+											<div class="cell">
+												<fieldset id="n1">
+													<label class="input-control radio">
+														<input type="radio" name="n1" value="todos"  >
+														<span class="check"></span> <span class="caption">Circular</span> </label>
+													<label class="input-control radio">
+														<input type="radio" name="n1" value="area">
+														<span class="check"></span> <span class="caption">Rectangular</span> </label>
+												</fieldset>
+											</div>
+
+										</div>
+								</div>
+
+							</div>
+							</div>
+								<section id="sec_areas" >
+									<div class="row cells4">
+										<div class="cell">
+											<label>Latitud Minima</label>
+											<div class="input-control text full-size">
+												<input type="text" value="0.5925"  id="latmin"/>
+											</div>
+										</div>
+										<div class="cell">
+											<label>Latitud Máxima</label>
+											<div class="input-control text full-size">
+												<input type="text" value="7.87503"  id="latmax"/>
+											</div>
+										</div>
+										<div class="cell">
+											<label>Longitud Minima</label>
+											<div class="input-control text full-size">
+												<input type="text" value="-77.084"  id="lonmin"/>
+											</div>
+										</div>
+										<div class="cell">
+											<label>Longitud Máxima</label>
+											<div class="input-control text full-size">
+												<input type="text" value="-68.48349"  id="lonmax"/>
+											</div>
+										</div>
+									</div>
+
+								</section>
+								<section id="sec_circulo" >
+									<div class="row cells3">
+										<div class="cell">
+											<label>Latitud</label>
+											<div class="input-control text full-size">
+												<input type="text" value="1.25"  id="latmin"/>
+											</div>
+										</div>
+
+										<div class="cell">
+											<label>Longitud </label>
+											<div class="input-control text full-size">
+												<input type="text" value="-74.25"  id="lonmin"/>
+											</div>
+										</div>
+										<div class="cell">
+											<label>Radio</label>
+											<div class="input-control text full-size">
+												<input type="text" value="100"  id="lonmax"/>
+											</div>
+										</div>
+									</div>
+
+								</section>
+								<div class="row cells4">
+									<div class="cell">
+										<label>RMS Minima</label>
+										<div class="input-control text full-size">
+											<input type="text" value=""  id="latmin"/>
+										</div>
+									</div>
+									<div class="cell">
+										<label>RMS Máxima</label>
+										<div class="input-control text full-size">
+											<input type="text" value=""  id="latmax"/>
+										</div>
+									</div>
+									<div class="cell">
+										<label>GAP Minima</label>
+										<div class="input-control text full-size">
+											<input type="text" value=""  id="lonmin"/>
+										</div>
+									</div>
+									<div class="cell">
+										<label>GAP Máxima</label>
+										<div class="input-control text full-size">
+											<input type="text" value=""  id="lonmax"/>
+										</div>
+									</div>
+								</div>
+								<div class="row cells6">
+									<div class="cell">
+										<label>Error Profundidad Minima</label>
+										<div class="input-control text full-size">
+											<input type="text" value=""  id="latmin"/>
+										</div>
+									</div>
+									<div class="cell">
+										<label>Error Profundidad Máxima</label>
+										<div class="input-control text full-size">
+											<input type="text" value=""  id="latmax"/>
+										</div>
+									</div>
+									<div class="cell">
+										<label>Error Longitud Minima</label>
+										<div class="input-control text full-size">
+											<input type="text" value=""  id="lonmin"/>
+										</div>
+									</div>
+									<div class="cell">
+										<label>Error Longitud Máxima</label>
+										<div class="input-control text full-size">
+											<input type="text" value=""  id="lonmax"/>
+										</div>
+									</div>
+									<div class="cell">
+										<label>Error  Latitud  <br>Minima</label>
+										<div class="input-control text full-size">
+											<input type="text" value=""  id="lonmin"/>
+										</div>
+									</div>
+									<div class="cell">
+										<label>Error  Latitud <br>Máxima</label>
+										<div class="input-control text full-size">
+											<input type="text" value=""  id="lonmax"/>
+										</div>
+									</div>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+				<br><br>
+			
+			<div class="example" >
+				<h4>Opciones de salida</h4>
+				<div class="row cells">
+					<br />
+					<div class="cell">
+						<button onclick="ejecutarConsulta()" class="button success">Tabla</button>
+						<button id="iniciarMapa" onclick="iniciarMapa()" class="button success">Mapa</button>
+						<button   class="button success">Excel (scv)</button>
+						<button  class="button success">KML</button>
+						<button  class="button success">QuakeML</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div data-role="dialog" id="dialog9" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
+			<h3>Seleccione el área para la consulta </h3>
+			<div class="grid">
+				<div class="row cells2">
+					<div class="cell" >
+						<label>Departamento</label>
+						<select name="departamento" class="js-select full-size" style="width: 100%;" >
+							<option selected="" value="DEPARTAMENTO">SELECCIONE DEPARTAMENTO </option>
+							<option value="AMAZONAS">AMAZONAS</option><option value="ANTIOQUIA">ANTIOQUIA</option><option value="ARAUCA">ARAUCA</option><option value="ARCHIPIELAGO_DE_SAN_ANDRES._PROV._Y_STA_CATALINA">ARCHIPIELAGO DE SAN ANDRES. PROV. Y STA CATALINA</option><option value="ATLANTICO">ATLANTICO</option><option value="BOLIVAR">BOLIVAR</option><option value="BOYACA">BOYACA</option><option value="CALDAS">CALDAS</option><option value="CAQUETA">CAQUETA</option><option value="CASANARE">CASANARE</option><option value="CAUCA">CAUCA</option><option value="CESAR">CESAR</option><option value="CHOCO">CHOCO</option><option value="CORDOBA">CORDOBA</option><option value="CUNDINAMARCA">CUNDINAMARCA</option><option value="GUAINIA">GUAINIA</option><option value="GUAVIARE">GUAVIARE</option><option value="HUILA">HUILA</option><option value="LA_GUAJIRA">LA GUAJIRA</option><option value="MAGDALENA">MAGDALENA</option><option value="META">META</option><option value="NARINO">NARINO</option><option value="NORTE_DE_SANTANDER">NORTE DE SANTANDER</option><option value="PUTUMAYO">PUTUMAYO</option><option value="QUINDIO">QUINDIO</option><option value="RISARALDA">RISARALDA</option><option value="SANTANDER">SANTANDER</option><option value="SUCRE">SUCRE</option><option value="TOLIMA">TOLIMA</option><option value="VALLE_DEL_CAUCA">VALLE DEL CAUCA</option><option value="VAUPES">VAUPES</option><option value="VICHADA">VICHADA</option><option value="ZONA_GEOGRAFICA_ESPECIAL">ZONA GEOGRAFICA ESPECIAL</option><option selected="" value="DEPARTAMENTO">SELECCIONE DEPARTAMENTO</option>       	         </select>
+					</div>
+					<div class="cell">
+						<label>Municipio</label>
+						<select name="municipio" class="js-select full-size" style="width: 100%;">
+							<option selected="" value="MUNICIPIO">SELECCIONE MUNICIPIO </option>
+							<option value="AGUA_DE_DIOS">AGUA DE DIOS</option><option value="ALBAN">ALBAN</option><option value="ANAPOIMA">ANAPOIMA</option><option value="ANOLAIMA">ANOLAIMA</option><option value="APULO">APULO</option><option value="ARBELAEZ">ARBELAEZ</option><option value="BELTRAN">BELTRAN</option><option value="BITUIMA">BITUIMA</option><option value="BOGOTA.Distrito_Capital">BOGOTA.Distrito Capital</option><option value="BOJACA">BOJACA</option><option value="CABRERA">CABRERA</option><option value="CACHIPAY">CACHIPAY</option><option value="CAJICA">CAJICA</option><option value="CAPARRAPI">CAPARRAPI</option><option value="CAQUEZA">CAQUEZA</option><option value="CARMEN_DE_CARUPA">CARMEN DE CARUPA</option><option value="CHAGUANI">CHAGUANI</option><option value="CHIA">CHIA</option><option value="CHIPAQUE">CHIPAQUE</option><option value="CHOACHI">CHOACHI</option><option value="CHOCONTA">CHOCONTA</option><option value="COGUA">COGUA</option><option value="COTA">COTA</option><option value="CUCUNUBA">CUCUNUBA</option><option value="EL_COLEGIO">EL COLEGIO</option><option value="EL_PENON">EL PENON</option><option value="EL_ROSAL">EL ROSAL</option><option value="FACATATIVA">FACATATIVA</option><option value="FOMEQUE">FOMEQUE</option><option value="FOSCA">FOSCA</option><option value="FUNZA">FUNZA</option><option value="FUQUENE">FUQUENE</option><option value="FUSAGASUGA">FUSAGASUGA</option><option value="GACHALA">GACHALA</option><option value="GACHANCIPA">GACHANCIPA</option><option value="GACHETA">GACHETA</option><option value="GAMA">GAMA</option><option value="GIRARDOT">GIRARDOT</option><option value="GRANADA">GRANADA</option><option value="GUACHETA">GUACHETA</option><option value="GUADUAS">GUADUAS</option><option value="GUASCA">GUASCA</option><option value="GUATAQUI">GUATAQUI</option><option value="GUATAVITA">GUATAVITA</option><option value="GUAYABAL_DE_SIQUIMA">GUAYABAL DE SIQUIMA</option><option value="GUAYABETAL">GUAYABETAL</option><option value="GUTIERREZ">GUTIERREZ</option><option value="JERUSALEN">JERUSALEN</option><option value="JUNIN">JUNIN</option><option value="LA_CALERA">LA CALERA</option><option value="LA_MESA">LA MESA</option><option value="LA_PALMA">LA PALMA</option><option value="LA_PENA">LA PENA</option><option value="LA_VEGA">LA VEGA</option><option value="LENGUAZAQUE">LENGUAZAQUE</option><option value="MACHETA">MACHETA</option><option value="MADRID">MADRID</option><option value="MANTA">MANTA</option><option value="MEDINA">MEDINA</option><option value="MOSQUERA">MOSQUERA</option><option value="NARINO">NARINO</option><option value="NEMOCON">NEMOCON</option><option value="NILO">NILO</option><option value="NIMAIMA">NIMAIMA</option><option value="NOCAIMA">NOCAIMA</option><option value="PACHO">PACHO</option><option value="PAIME">PAIME</option><option value="PANDI">PANDI</option><option value="PARATEBUENO">PARATEBUENO</option><option value="PASCA">PASCA</option><option value="PUERTO_SALGAR">PUERTO SALGAR</option><option value="PULI">PULI</option><option value="QUEBRADANEGRA">QUEBRADANEGRA</option><option value="QUETAME">QUETAME</option><option value="QUIPILE">QUIPILE</option><option value="RICAURTE">RICAURTE</option><option value="SAN_ANTONIO_DEL_TEQUENDAMA">SAN ANTONIO DEL TEQUENDAMA</option><option value="SAN_BERNARDO">SAN BERNARDO</option><option value="SAN_CAYETANO">SAN CAYETANO</option><option value="SAN_FRANCISCO">SAN FRANCISCO</option><option value="SAN_JUAN_DE_RIOSECO">SAN JUAN DE RIOSECO</option><option value="SASAIMA">SASAIMA</option><option value="SESQUILE">SESQUILE</option><option value="SIBATE">SIBATE</option><option value="SILVANIA">SILVANIA</option><option value="SIMIJACA">SIMIJACA</option><option value="SOACHA">SOACHA</option><option value="SOPO">SOPO</option><option value="SUBACHOQUE">SUBACHOQUE</option><option value="SUESCA">SUESCA</option><option value="SUPATA">SUPATA</option><option value="SUSA">SUSA</option><option value="SUTATAUSA">SUTATAUSA</option><option value="TABIO">TABIO</option><option value="TAUSA">TAUSA</option><option value="TENA">TENA</option><option value="TENJO">TENJO</option><option value="TIBACUY">TIBACUY</option><option value="TIBIRITA">TIBIRITA</option><option value="TOCAIMA">TOCAIMA</option><option value="TOCANCIPA">TOCANCIPA</option><option value="TOPAIPI">TOPAIPI</option><option value="UBALA">UBALA</option><option value="UBAQUE">UBAQUE</option><option value="UBATE">UBATE</option><option value="UNE">UNE</option><option value="UTICA">UTICA</option><option value="VENECIA">VENECIA</option><option value="VERGARA">VERGARA</option><option value="VIANI">VIANI</option><option value="VILLAGOMEZ">VILLAGOMEZ</option><option value="VILLAPINZON">VILLAPINZON</option><option value="VILLETA">VILLETA</option><option value="VIOTA">VIOTA</option><option value="YACOPI">YACOPI</option><option value="ZIPACON">ZIPACON</option><option value="ZIPAQUIRA">ZIPAQUIRA</option>       	        </select>
+					</div>
+				</div>
+			</div>
+			<section id="sec_mapa" >
+				<div id="map"></div>
+				<button onclick="cambio2()" class="button success">Listo</button>
+			</section>
+		</div>
+
+			<div data-role="dialog" id="dialog8" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
+				<h3>Seleccione el área para la consulta </h3>
+				<div class="grid">
+					<div class="row cells2">
+						<div class="cell" >
+							<label>Departamento</label>
+							<select name="departamento" class="js-select full-size" style="width: 100%;" >
+								<option selected="" value="DEPARTAMENTO">SELECCIONE DEPARTAMENTO </option>
+								<option value="AMAZONAS">AMAZONAS</option><option value="ANTIOQUIA">ANTIOQUIA</option><option value="ARAUCA">ARAUCA</option><option value="ARCHIPIELAGO_DE_SAN_ANDRES._PROV._Y_STA_CATALINA">ARCHIPIELAGO DE SAN ANDRES. PROV. Y STA CATALINA</option><option value="ATLANTICO">ATLANTICO</option><option value="BOLIVAR">BOLIVAR</option><option value="BOYACA">BOYACA</option><option value="CALDAS">CALDAS</option><option value="CAQUETA">CAQUETA</option><option value="CASANARE">CASANARE</option><option value="CAUCA">CAUCA</option><option value="CESAR">CESAR</option><option value="CHOCO">CHOCO</option><option value="CORDOBA">CORDOBA</option><option value="CUNDINAMARCA">CUNDINAMARCA</option><option value="GUAINIA">GUAINIA</option><option value="GUAVIARE">GUAVIARE</option><option value="HUILA">HUILA</option><option value="LA_GUAJIRA">LA GUAJIRA</option><option value="MAGDALENA">MAGDALENA</option><option value="META">META</option><option value="NARINO">NARINO</option><option value="NORTE_DE_SANTANDER">NORTE DE SANTANDER</option><option value="PUTUMAYO">PUTUMAYO</option><option value="QUINDIO">QUINDIO</option><option value="RISARALDA">RISARALDA</option><option value="SANTANDER">SANTANDER</option><option value="SUCRE">SUCRE</option><option value="TOLIMA">TOLIMA</option><option value="VALLE_DEL_CAUCA">VALLE DEL CAUCA</option><option value="VAUPES">VAUPES</option><option value="VICHADA">VICHADA</option><option value="ZONA_GEOGRAFICA_ESPECIAL">ZONA GEOGRAFICA ESPECIAL</option><option selected="" value="DEPARTAMENTO">SELECCIONE DEPARTAMENTO</option>       	         </select>
+						</div>
+						<div class="cell">
+							<label>Municipio</label>
+							<select name="municipio" class="js-select full-size" style="width: 100%;">
+								<option selected="" value="MUNICIPIO">SELECCIONE MUNICIPIO </option>
+								<option value="AGUA_DE_DIOS">AGUA DE DIOS</option><option value="ALBAN">ALBAN</option><option value="ANAPOIMA">ANAPOIMA</option><option value="ANOLAIMA">ANOLAIMA</option><option value="APULO">APULO</option><option value="ARBELAEZ">ARBELAEZ</option><option value="BELTRAN">BELTRAN</option><option value="BITUIMA">BITUIMA</option><option value="BOGOTA.Distrito_Capital">BOGOTA.Distrito Capital</option><option value="BOJACA">BOJACA</option><option value="CABRERA">CABRERA</option><option value="CACHIPAY">CACHIPAY</option><option value="CAJICA">CAJICA</option><option value="CAPARRAPI">CAPARRAPI</option><option value="CAQUEZA">CAQUEZA</option><option value="CARMEN_DE_CARUPA">CARMEN DE CARUPA</option><option value="CHAGUANI">CHAGUANI</option><option value="CHIA">CHIA</option><option value="CHIPAQUE">CHIPAQUE</option><option value="CHOACHI">CHOACHI</option><option value="CHOCONTA">CHOCONTA</option><option value="COGUA">COGUA</option><option value="COTA">COTA</option><option value="CUCUNUBA">CUCUNUBA</option><option value="EL_COLEGIO">EL COLEGIO</option><option value="EL_PENON">EL PENON</option><option value="EL_ROSAL">EL ROSAL</option><option value="FACATATIVA">FACATATIVA</option><option value="FOMEQUE">FOMEQUE</option><option value="FOSCA">FOSCA</option><option value="FUNZA">FUNZA</option><option value="FUQUENE">FUQUENE</option><option value="FUSAGASUGA">FUSAGASUGA</option><option value="GACHALA">GACHALA</option><option value="GACHANCIPA">GACHANCIPA</option><option value="GACHETA">GACHETA</option><option value="GAMA">GAMA</option><option value="GIRARDOT">GIRARDOT</option><option value="GRANADA">GRANADA</option><option value="GUACHETA">GUACHETA</option><option value="GUADUAS">GUADUAS</option><option value="GUASCA">GUASCA</option><option value="GUATAQUI">GUATAQUI</option><option value="GUATAVITA">GUATAVITA</option><option value="GUAYABAL_DE_SIQUIMA">GUAYABAL DE SIQUIMA</option><option value="GUAYABETAL">GUAYABETAL</option><option value="GUTIERREZ">GUTIERREZ</option><option value="JERUSALEN">JERUSALEN</option><option value="JUNIN">JUNIN</option><option value="LA_CALERA">LA CALERA</option><option value="LA_MESA">LA MESA</option><option value="LA_PALMA">LA PALMA</option><option value="LA_PENA">LA PENA</option><option value="LA_VEGA">LA VEGA</option><option value="LENGUAZAQUE">LENGUAZAQUE</option><option value="MACHETA">MACHETA</option><option value="MADRID">MADRID</option><option value="MANTA">MANTA</option><option value="MEDINA">MEDINA</option><option value="MOSQUERA">MOSQUERA</option><option value="NARINO">NARINO</option><option value="NEMOCON">NEMOCON</option><option value="NILO">NILO</option><option value="NIMAIMA">NIMAIMA</option><option value="NOCAIMA">NOCAIMA</option><option value="PACHO">PACHO</option><option value="PAIME">PAIME</option><option value="PANDI">PANDI</option><option value="PARATEBUENO">PARATEBUENO</option><option value="PASCA">PASCA</option><option value="PUERTO_SALGAR">PUERTO SALGAR</option><option value="PULI">PULI</option><option value="QUEBRADANEGRA">QUEBRADANEGRA</option><option value="QUETAME">QUETAME</option><option value="QUIPILE">QUIPILE</option><option value="RICAURTE">RICAURTE</option><option value="SAN_ANTONIO_DEL_TEQUENDAMA">SAN ANTONIO DEL TEQUENDAMA</option><option value="SAN_BERNARDO">SAN BERNARDO</option><option value="SAN_CAYETANO">SAN CAYETANO</option><option value="SAN_FRANCISCO">SAN FRANCISCO</option><option value="SAN_JUAN_DE_RIOSECO">SAN JUAN DE RIOSECO</option><option value="SASAIMA">SASAIMA</option><option value="SESQUILE">SESQUILE</option><option value="SIBATE">SIBATE</option><option value="SILVANIA">SILVANIA</option><option value="SIMIJACA">SIMIJACA</option><option value="SOACHA">SOACHA</option><option value="SOPO">SOPO</option><option value="SUBACHOQUE">SUBACHOQUE</option><option value="SUESCA">SUESCA</option><option value="SUPATA">SUPATA</option><option value="SUSA">SUSA</option><option value="SUTATAUSA">SUTATAUSA</option><option value="TABIO">TABIO</option><option value="TAUSA">TAUSA</option><option value="TENA">TENA</option><option value="TENJO">TENJO</option><option value="TIBACUY">TIBACUY</option><option value="TIBIRITA">TIBIRITA</option><option value="TOCAIMA">TOCAIMA</option><option value="TOCANCIPA">TOCANCIPA</option><option value="TOPAIPI">TOPAIPI</option><option value="UBALA">UBALA</option><option value="UBAQUE">UBAQUE</option><option value="UBATE">UBATE</option><option value="UNE">UNE</option><option value="UTICA">UTICA</option><option value="VENECIA">VENECIA</option><option value="VERGARA">VERGARA</option><option value="VIANI">VIANI</option><option value="VILLAGOMEZ">VILLAGOMEZ</option><option value="VILLAPINZON">VILLAPINZON</option><option value="VILLETA">VILLETA</option><option value="VIOTA">VIOTA</option><option value="YACOPI">YACOPI</option><option value="ZIPACON">ZIPACON</option><option value="ZIPAQUIRA">ZIPAQUIRA</option>       	        </select>
+						</div>
+					</div>
+				</div>
+				<section id="sec_mapa" >
+					<div id="map1"></div>
+					<button onclick="cambio2()" class="button success">Listo</button>
+				</section>
+			</div>
+		
+		
+		<div  id="tabla_general">
+            <table id="example_table" class="table striped hovered cell-hovered border bordered">
+                <thead>
+                <tr>
+                	<th>Estado</th>
+                    <th>Descripcion</th>
+                    <th>Fecha (UTC)</th>
+                    <th>Fecha (Local)</th>
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+                    <th>Profundidad</th>
+					<th>Magnitud</th>
+                    <th>Tipo Magnitud</th>
+                </tr>
+                </thead>
+
+                <tfoot>
+                <tr>
+					<th>Estado</th>
+					<th>Descripcion</th>
+					<th>Fecha (UTC)</th>
+					<th>Fecha (Local)</th>
+					<th>Latitud</th>
+					<th>Longitud</th>
+					<th>Profundidad</th>
+					<th>Magnitud</th>
+					<th>Tipo Magnitud</th>
+                </tr>
+                </tfoot>
+
+                <tbody id="tabla">
+                
+                
+                </tbody>
+            </table>
+            
+            <section id="sec_mapa2" >
+				<div id="map2"></div>
+				
+			</section>
+        </div> <!-- End of example table -->
+		<script src="js/jquery.datetimepicker.js"></script>
+		<script src="js/datepikeroptions.js"></script>
+
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRhxOtAXhSi0xoKflXvdywogocAFzNoCc&callback=initMap"
+		async defer></script>
+	</body>
+</html>

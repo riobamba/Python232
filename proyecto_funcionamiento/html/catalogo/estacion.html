@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Response File</title>
+		
+
+		<link rel="stylesheet" href="css/label.css">
+		<link href="css/metro.css" rel="stylesheet">
+		<link href="css/metro-icons.css" rel="stylesheet">
+		<link href="css/metro-responsive.css" rel="stylesheet">
+		<link href="css/metro-schemes.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
+		
+		<link href="css/docs.css" rel="stylesheet">
+
+		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3"></script>
+		<script type="text/javascript" src="js/markerwithlabel.js"></script>
+		<script type="text/javascript" src="js/confi-mapa.js"></script>
+		<script src="js/metro.js"></script>
+		<script src="js/prettify/run_prettify.js"></script>
+		<script src="js/select2.min.js"></script>
+		<script src="js/jquery.dataTables.min.js"></script>
+    <script src="js/ga.js"></script>
+
+	</head>
+	<body onload="initMap()">
+		<div id="map_canvas" style="height: 100%; width: 100%;"></div>
+
+		<div id="flotante" >
+			<div class="panel success">
+				<div class="heading">
+					<span class="title">Redes</span>
+				</div>
+				<div class="content padding10" id="menuflotante">
+
+				</div>
+			</div>
+
+		</div>
+		<div data-role="dialog" id="dialog9" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
+			<div id="station"></div>
+			<div class="margin20 no-margin-left no-margin-right sub-header text-light">
+				Seleccione las componentes requeridas
+			</div>
+			<div id="componentes"></div>
+			<div class="padding20 no-padding-right no-padding-left no-padding-top">
+				<button class="button success" onclick="solicitarXml()">
+					Descargar
+				</button>
+			</div>
+
+		</div>
+		<div data-role="dialog" id="dialog11" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
+
+			<div class="margin20 no-margin-left no-margin-right sub-header text-light">
+				Lo sentimos no hay información de respuesta para esta(s) componente(s)
+			</div>
+
+		</div>
+		<div data-role="dialog" id="dialog10" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
+			<br>
+			<button class="button loading-pulse lighten primary">
+				Procesando
+			</button>
+			<br>
+
+		</div>
+
+	</body>
+</html>
