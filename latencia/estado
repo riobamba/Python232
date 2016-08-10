@@ -1,0 +1,30 @@
+import requests
+from apscheduler.schedulers.blocking import BlockingScheduler
+import sqlite3
+from datetime import datetime, timedelta
+
+
+def estado():
+    conn = sqlite3.connect('latency.sqlite')
+    estado = conn.cursor()
+    print('\n\nTick! Estado Tiempo de Ejecucion: %s' % datetime.now())
+    estado.execute("select estacion, estado, estacion_id, fecha from service_estado sl inner join  service_estacion se on se.id=sl.estacion_id order by estacion_id")
+
+    cursor_latencia= estado.fetchall()
+
+    for i in cursor_latencia:
+        if i[1] == "entra":
+            print "Estacion %s Ingresa %s" % (i[0],i[3])
+        elif i[1] == "salio":
+            print "Estacion %s Sale %s" % (i[0],i[3])
+
+    conn.close()
+
+
+
+#estado()
+
+sched = BlockingScheduler()
+sched.add_job(estado, 'interval', seconds=10)
+sched.start()
+

@@ -3,8 +3,11 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from datetime import datetime
 import time
 import sqlite3
-import os
-from apscheduler.schedulers.background import BackgroundScheduler
+from procesa import verificar
+
+def main():
+    tick()
+    verificar()
 
 
 def tick():
@@ -12,7 +15,7 @@ def tick():
     estacion = conn.cursor()
     cursor = conn.cursor()
     estacion.execute("select id,estacion from service_estacion")
-    print('Tick! The time is: %s' % datetime.now())
+    print('Tick! Cliente Tiempo de Ejecucion: %s' % datetime.now())
     url = "http://10.100.100.232:8081/query/objects.json?QC&last=%s" % (time.strftime("%Y%m%d.%H%M%S", time.localtime()))
     print url
     response = requests.get(url)
@@ -32,8 +35,9 @@ def tick():
     else:
         print "Error code %s" % response.status_code
 
+    conn.close()
 
 sched = BlockingScheduler()
-sched.add_job(tick, 'interval', seconds=150)
+sched.add_job(main, 'interval', seconds=10)
 sched.start()
 
