@@ -73,7 +73,7 @@ def service_historial_utimos(request):
         cursor = connection.cursor()
         cursor.execute(("select estacion, valor, fecha, administrador from service_historial sl inner join  service_estacion se on se.id=sl.estacion_id and fecha BETWEEN '%s' AND '%s'  order by fecha desc  limit 12")%(fecha_atras,fecha_actual))
         for row in cursor:
-          est= {"estacion":row[0], "valor":row[1], "fecha":str(row[2]) }
+          est= {"estacion":row[0], "valor":row[1], "fecha":str(row[2]),"admin":row[3] }
           datos.append(est)
         resp=json.loads(json.dumps(datos,ensure_ascii=False))
     except Estacion.DoesNotExist:

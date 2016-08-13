@@ -16,6 +16,9 @@ var latencia;
 var estaciones = [];
 var panel = new Array();
 
+var soundID = "Thunder";
+var soundID2 = "Thunder2";
+
 function initMap() {
     iniciarMapa();
     //crearMenu();
@@ -148,6 +151,9 @@ function marcadores() {
                     timeout: 20000,
                     icon: "<span class='mif-checkmark'></span>"
                 });
+                if (field.admin!="INTER"){
+                playSoundIngreso();
+                }
             } else {
                 $.Notify({
                     caption: '       Sale ' + field.estacion,
@@ -156,7 +162,9 @@ function marcadores() {
                     timeout: 20000,
                     icon: "<span class='mif-cross'></span>"
                 });
-
+                if (field.admin!="INTER"){
+                playSoundSalida();
+                }
             }
 
         });
@@ -270,7 +278,10 @@ function iniciarMapa() {
 
         });
     })
+    createjs.Sound.registerSound("static/assets/alarma.mp3", soundID);
+    createjs.Sound.registerSound("static/assets/entra.mp3", soundID2);
 }
+
 
 function showDialog() {
     var da = network.Inventory.network[idnetwork].station;
@@ -287,4 +298,12 @@ function showDialog() {
     } else {
         dialog.close();
     }
+}
+
+function playSoundSalida () {
+  createjs.Sound.play(soundID);
+}
+
+function playSoundIngreso () {
+  createjs.Sound.play(soundID2);
 }
