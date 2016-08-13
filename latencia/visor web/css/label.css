@@ -46,32 +46,22 @@ text-align: center;
     line-height: 25px;
 }
 
-.label,.label1,.label2 {
+.label1 {
     background: #4d9b19;
     border: 2px solid #535353;
 }
 
-/*.label1 {
-background: #074f00;
-border: 2px solid #2e6700;
-}
-
 .label2 {
-background: #007179;
-border: 2px solid #008b86;
+    background: #007179;
+    border: 2px solid #008b86;
 }
-
 .label3 {
-background: #4d4b00;
-border: 2px solid #6e6e00;
-} */
-
-.label3 {
-    background: #2f230c;
+    background: #ad1b03;
     border: 2px solid #535353;
 }
 
 .label4 {
-    background: #ad1b03;
+    background: #2f230c;
     border: 2px solid #535353;
 }
+

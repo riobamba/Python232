@@ -46,7 +46,7 @@ def verificar(latencia):
     cursor = conn.cursor()
     estacion = conn.cursor()
     #print('\nTick! Verificador Tiempo de Ejecucion: %s' % datetime.now())
-    estacion.execute("select estado,fecha,estacion_id from service_estado order by estacion_id")
+    estacion.execute("select valor,fecha,estacion_id from service_estado order by estacion_id")
     cursor_estado = estacion.fetchall()
     datos_estado =len(cursor_estado)
     #print datos_estado
@@ -55,13 +55,13 @@ def verificar(latencia):
             data = latencia[i]
             for j in cursor_estado:
                 if data['id_estacion']==j[2]:
-                    cursor.execute("UPDATE service_estado SET estado='%s',fecha='%s' WHERE estacion_id=%s;" %(cambio(estado(data['valor']),j[0]),data['fecha'],data['id_estacion']))
+                    cursor.execute("UPDATE service_estado SET valor='%s',fecha='%s' WHERE estacion_id=%s;" %(cambio(estado(data['valor']),j[0]),data['fecha'],data['id_estacion']))
     else:
         cursor.execute('''delete from service_estado''')
         conn.commit()
         for i in latencia:
             data = latencia[i]
-            cursor.execute('''INSERT INTO service_estado (estado,fecha,estacion_id) VALUES(?,?,?)''',(estado(float(data['valor'])), data['fecha'],data['id_estacion']))
+            cursor.execute('''INSERT INTO service_estado (valor,fecha,estacion_id) VALUES(?,?,?)''',(estado(float(data['valor'])), data['fecha'],data['id_estacion']))
     conn.commit()
     conn.close()
     estados()
@@ -97,18 +97,18 @@ def estados():
     estado = conn.cursor()
     cursor = conn.cursor()
     print('\nTick! Estado Tiempo de Ejecucion: %s' % datetime.now())
-    estado.execute("select estacion, estado, estacion_id, fecha from service_estado sl inner join  service_estacion se on se.id=sl.estacion_id order by estacion_id")
+    estado.execute("select estacion, valor, estacion_id, fecha from service_estado sl inner join  service_estacion se on se.id=sl.estacion_id order by estacion_id")
 
     cursor_latencia= estado.fetchall()
 
     for i in cursor_latencia:
         if i[1] == "entra":
             print "Estacion %s Ingresa %s" % (i[0],i[3])
-            cursor.execute('''INSERT INTO service_historial (estado,fecha,estacion_id) VALUES(?,?,?)''',('in',i[3] , i[2]))
+            cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id) VALUES(?,?,?)''',('in',i[3] , i[2]))
             conn.commit()
         elif i[1] == "salio":
             print "Estacion %s Sale %s" % (i[0],i[3])
-            cursor.execute('''INSERT INTO service_historial (estado,fecha,estacion_id) VALUES(?,?,?)''',('out', i[3], i[2]))
+            cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id) VALUES(?,?,?)''',('out', i[3], i[2]))
             conn.commit()
 
     conn.close()
