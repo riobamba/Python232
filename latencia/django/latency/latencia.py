@@ -9,7 +9,7 @@ def main():
     cliente()
 
 def cliente():
-    conn = sqlite3.connect('latency/latency.sqlite')
+    conn = sqlite3.connect('latency.sqlite')
     estacion = conn.cursor()
     estacion.execute("select id,estacion from service_estacion")
     #print('\nTick! Cliente Tiempo de Ejecucion: %s' % datetime.now())
@@ -42,7 +42,7 @@ def cliente():
 
 
 def verificar(latencia):
-    conn = sqlite3.connect('latency/latency.sqlite')
+    conn = sqlite3.connect('latency.sqlite')
     cursor = conn.cursor()
     estacion = conn.cursor()
     #print('\nTick! Verificador Tiempo de Ejecucion: %s' % datetime.now())
@@ -93,7 +93,7 @@ def cambio(actual, anterior):
 
 
 def estados():
-    conn = sqlite3.connect('latency/latency.sqlite')
+    conn = sqlite3.connect('latency.sqlite')
     estado = conn.cursor()
     cursor = conn.cursor()
     print('\nTick! Estado Tiempo de Ejecucion: %s' % datetime.now())
@@ -104,11 +104,11 @@ def estados():
     for i in cursor_latencia:
         if i[1] == "entra":
             print "Estacion %s Ingresa %s" % (i[0],i[3])
-            cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id) VALUES(?,?,?)''',('in',i[3] , i[2]))
+            cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id) VALUES(?,?,?)''',('in',datetime.now() , i[2]))
             conn.commit()
         elif i[1] == "salio":
             print "Estacion %s Sale %s" % (i[0],i[3])
-            cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id) VALUES(?,?,?)''',('out', i[3], i[2]))
+            cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id) VALUES(?,?,?)''',('out', datetime.now(), i[2]))
             conn.commit()
 
     conn.close()

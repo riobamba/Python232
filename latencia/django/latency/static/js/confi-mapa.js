@@ -25,7 +25,7 @@ function initMap() {
 
 }
 
-setInterval(myTimer, 50000);
+setInterval(myTimer, 10000);
 
 function myTimer() {
     marcadores();
@@ -114,7 +114,7 @@ function construirTabla(description, codigo, longitud, latitud, elevacion, data,
 }
 
 function marcadores() {
-    $.getJSON('http://localhost:8000/latencia/', function(data) {
+    $.getJSON('http://127.0.0.1:8000/latencia/', function(data) {
         $.each(data, function(i, field) {
             var label = "";
             if (field.valor == 'ok') {
@@ -140,10 +140,11 @@ function marcadores() {
     })
 
     var nuevos = false;
-    $.getJSON('http://localhost:8000/historial2/', function(data) {
+    $.getJSON('http://127.0.0.1:8000/historial2/', function(data) {
 
         $.each(data, function(i, field) {
-            if (field.valor == "in") {
+            if (repetidosPanel(field)==false){
+                if (field.valor == "in") {
                 $.Notify({
                     caption: '       Ingresa ' + field.estacion,
                     content: field.fecha,
@@ -166,11 +167,14 @@ function marcadores() {
                 playSoundSalida();
                 }
             }
+            }
+
 
         });
 
         $.each(data, function(i, field) {
-            nuevos = true;
+            if (repetidosPanel(field)==false){
+                            nuevos = true;
             var aux = new Array();
             for (var i = 0, length = panel.length; i < (length - 1); i++) {
                 aux.push(panel[i])
@@ -181,12 +185,26 @@ function marcadores() {
             for (var i = 0, length = aux.length; i < length; i++) {
                 panel.push(aux[i])
             }
+            }
+
         });
 
         if (nuevos == true) {
             pintarPanel();
         }
     })
+
+}
+
+function repetidosPanel(field){
+        for (var i = 0, length = panel.length; i < length; i++) {
+            if (panel[i].estacion == field.estacion && panel[i].fecha == field.fecha) {
+                    //alert(panel[i].estacion+" == "+field.estacion+" && "+panel[i].fecha+" =="+ field.fecha)
+                    return true;
+                }
+
+        }
+        return false;
 
 }
 
@@ -222,7 +240,7 @@ function iniciarMapa() {
         mapTypeId: google.maps.MapTypeId.TERRAIN
     });
     //marcadores();
-    $.getJSON('http://localhost:8000/latencia/', function(data) {
+    $.getJSON('http://127.0.0.1:8000/latencia/', function(data) {
         $.each(data, function(i, field) {
             var label = "";
             if (field.valor == 'ok') {
@@ -266,7 +284,7 @@ function iniciarMapa() {
     })
 
     $("#history").empty();
-    $.getJSON('http://localhost:8000/historial/', function(data) {
+    $.getJSON('http://127.0.0.1:8000/historial/', function(data) {
 
         $.each(data, function(i, field) {
             panel.push(field)

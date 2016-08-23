@@ -1,14 +1,9 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
-from service.models import Estado
 from service.models import Estacion
-from service.serializers import EstadoSerializer
-from service.serializers import EstacionSerializer
 from django.db import connection
 import json
-from django.core import serializers
 from django.shortcuts import render,redirect
 from datetime import datetime, timedelta
 
@@ -66,7 +61,7 @@ def service_historial_utimos(request):
     Retorna los ultimos registros de la tabal historial.
     """
     fecha_actual = datetime.now()
-    segundos = timedelta(seconds=80)
+    segundos = timedelta(seconds=60)
     fecha_atras = fecha_actual - segundos
     try:
         datos=[]

@@ -1,0 +1,27 @@
+Ubuntu server cuenta con dos versiones de python 2.7 y 3.5 por lo cual se requiere instalar 
+diferentes versiones de pip, para 2.7 se instala normal pero para el 3.5 se sigue los siguente
+apt install python3-pip
+y se ejecuta asi:
+pip3 install paquete_a_instalar
+
+
+para los archivos estaticos tener en cuenta lo siguente:
+se debe incluir los datos en la configuracion del apache 
+
+Alias /static/ /var/latencia/latency/static/
+
+<Directory /var/latencia/latency/static>
+        Require all granted
+</Directory>
+
+
+WSGIPythonPath /var/latencia/latency
+
+WSGIScriptAlias /latencia /var/latencia/latency/latency/wsgi.py
+
+<Directory /var/latencia/latency>
+<Files wsgi.py>
+        Require all granted
+</Files>
+</Directory>
+
