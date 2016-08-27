@@ -13,11 +13,23 @@ class Estacion(models.Model):
     def __unicode__(self):
         return '{}'.format(self.estacion)
 
-class Estado(models.Model):
-    estacion = models.ForeignKey(Estacion, related_name='Estado')
-    valor = models.TextField()
+class Estado232(models.Model):
+    estacion = models.ForeignKey(Estacion, related_name='Estacion232')
+    valor = models.FloatField()
     fecha = models.DateTimeField()
-    
+    servidor = models.TextField()
+    class Meta:
+        unique_together = ('estacion', 'fecha')
+        ordering = ['fecha']
+
+    def __unicode__(self):
+        return '{}{}'.format(self.fecha, self.valor)
+
+class Estado13(models.Model):
+    estacion = models.ForeignKey(Estacion, related_name='Estacion13')
+    valor = models.FloatField()
+    fecha = models.DateTimeField()
+    servidor = models.TextField()
     class Meta:
         unique_together = ('estacion', 'fecha')
         ordering = ['fecha']
@@ -27,8 +39,9 @@ class Estado(models.Model):
 
 class Historial(models.Model):
     estacion = models.ForeignKey(Estacion, related_name='Historial')
-    valor = models.TextField()
+    valor = models.FloatField()
     fecha = models.DateTimeField()
+    servidor = models.TextField()
     
     class Meta:
         unique_together = ('estacion', 'fecha')
@@ -40,8 +53,9 @@ class Historial(models.Model):
 
 class Funcionamiento(models.Model):
     estacion = models.ForeignKey(Estacion, related_name='funcionamiento')
-    valor = models.TextField()
-    fecha = models.DateField()
+    valor = models.FloatField()
+    fecha = models.DateTimeField()
+    servidor = models.TextField()
 
     class Meta:
         unique_together = ('estacion', 'fecha')
@@ -53,8 +67,9 @@ class Funcionamiento(models.Model):
 
 class Funcionamiento_temp(models.Model):
     estacion = models.ForeignKey(Estacion, related_name='funcionamiento_temp')
-    valor = models.TextField()
-    fecha = models.DateField()
+    valor = models.FloatField()
+    fecha = models.DateTimeField()
+    servidor = models.TextField()
 
     class Meta:
         unique_together = ('estacion', 'fecha')
