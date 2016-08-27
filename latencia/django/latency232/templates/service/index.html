@@ -1,0 +1,79 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Latencia</title>
+		
+
+		<link href="{% static 'css/label.css' %}" rel="stylesheet">
+		<link href="{% static 'css/metro.css' %}" rel="stylesheet">
+		<link href="{% static 'css/metro-icons.css' %}" rel="stylesheet">
+		<link href="{% static 'css/metro-responsive.css' %}" rel="stylesheet">
+		<link href="{% static 'css/metro-schemes.css' %}" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.css' %}"/>
+		<link href="{% static 'css/docs.css' %}" rel="stylesheet">
+
+		<script type="text/javascript" src="{% static 'js/jquery-2.1.3.min.js' %}"></script>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRhxOtAXhSi0xoKflXvdywogocAFzNoCc"></script>
+		<script type="text/javascript" src="{% static 'js/markerwithlabel.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/confi-mapa.js' %}"></script>
+		<script src="{% static 'js/metro.js'%}"></script>
+		<script src="{% static 'js/select2.min.js'%}"></script>
+		<script src="{% static 'js/jquery.dataTables.min.js'%}"></script>
+		<script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script>
+
+
+	</head>
+	<body onload="initMap()">
+		<div id="map_canvas" style="height: 100%; width: 80%;"></div>
+
+	<div id="flotante" >
+			<div class="panel success">
+				<div class="heading">
+					<span class="title">Historial</span>
+
+				</div>
+				<div class="scroll-pane padding10" id="menuflotante">
+					<div class="grid">
+						<div class="row cells1" id="history">
+
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+		<div data-role="dialog" id="dialog9" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
+			<div id="station"></div>
+			<div class="margin20 no-margin-left no-margin-right sub-header text-light">
+				Seleccione las componentes requeridas
+			</div>
+			<div id="componentes"></div>
+			<div class="padding20 no-padding-right no-padding-left no-padding-top">
+				<button class="button success" onclick="">
+					Descargar
+				</button>
+			</div>
+
+		</div>
+		<div data-role="dialog" id="dialog11" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
+
+			<div class="margin20 no-margin-left no-margin-right sub-header text-light">
+				Lo sentimos no hay información de respuesta para esta(s) componente(s)
+			</div>
+
+		</div>
+		<div data-role="dialog" id="dialog10" class="padding20" data-close-button="true" data-overlay="true" data-overlay-color="op-dark">
+			<br>
+			<button class="button loading-pulse lighten primary">
+				Procesando
+			</button>
+			<br>
+
+		</div>
+
+	</body>
+</html>

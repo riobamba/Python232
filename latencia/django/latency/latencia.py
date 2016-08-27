@@ -27,18 +27,21 @@ def cliente():
                if station[1] == row[1]:
                   band=False
                   sta['valor']=result['params']['latency']['value']
+                  sta['disp'] = result['params']['availability']['value']
                   timestamp = str(result['params']['latency']['timestamp'])
                   sta['fecha']=datetime.fromtimestamp(int(timestamp[0:10])).strftime('%Y-%m-%d %H:%M:%S')
                   sta['id_estacion']=row[0]
             if band :
                 sta['valor'] = -1
+                sta['disp'] = 0
                 sta['fecha'] = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
                 sta['id_estacion'] = row[0]
             latencia[row[0]]=sta
     else:
-        print "Error code %s" % response.status_code
-    verificar(latencia)
+        print "Error code %s" % (response.status_code)
     conn.close()
+    verificar(latencia)
+    funcionamiento(latencia)
 
 
 def verificar(latencia):
@@ -65,6 +68,15 @@ def verificar(latencia):
     conn.commit()
     conn.close()
     estados()
+
+def funcionamiento(latencia):
+    conn = sqlite3.connect('latency.sqlite')
+    cursor = conn.cursor()
+    for i in latencia:
+        data = latencia[i]
+        cursor.execute("INSERT INTO service_funcionamiento_temp (valor,fecha,estacion_id) VALUES(%s,'%s',%s);" % (data['disp'], datetime.now(), data['id_estacion']))
+    conn.commit()
+    conn.close()
 
 
 
@@ -103,12 +115,12 @@ def estados():
 
     for i in cursor_latencia:
         if i[1] == "entra":
-            print "Estacion %s Ingresa %s" % (i[0],i[3])
-            cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id) VALUES(?,?,?)''',('in',datetime.now() , i[2]))
+            print "Estacion %s Ingresa %s" % (i[0],datetime.now())
+            cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id) VALUES(?,?,?)''',('in',datetime.now(), i[2]))
             conn.commit()
         elif i[1] == "salio":
-            print "Estacion %s Sale %s" % (i[0],i[3])
-            cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id) VALUES(?,?,?)''',('out', datetime.now(), i[2]))
+            print "Estacion %s Sale %s" % (i[0],datetime.now())
+            cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id) VALUES(?,?,?)''',('out',datetime.now(), i[2]))
             conn.commit()
 
     conn.close()
