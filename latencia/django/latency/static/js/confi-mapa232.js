@@ -16,8 +16,10 @@ var latencia;
 var estaciones = [];
 var panel = new Array();
 var urlservicio="http://127.0.0.1:8000/"
+var servidor="232"
 var soundID = "Thunder";
 var soundID2 = "Thunder2";
+var est_act=0;
 
 function initMap() {
     iniciarMapa();
@@ -114,10 +116,12 @@ function construirTabla(description, codigo, longitud, latitud, elevacion, data,
 }
 
 function marcadores() {
-    $.getJSON(urlservicio+'latencia/', function(data) {
+    $.getJSON(urlservicio+'latencia232/', function(data) {
+    est_act=0;
         $.each(data, function(i, field) {
             var label = "";
             if (field.valor == 'ok') {
+                 est_act+=1;
                 label = "label1";
             } else if (field.valor == 'entra') {
                 label = "label2";
@@ -139,8 +143,9 @@ function marcadores() {
         });
     })
 
+    $("#esta_activas").text("Activas "+est_act+"/"+estaciones.length);
     var nuevos = false;
-    $.getJSON(urlservicio+'historial2/', function(data) {
+    $.getJSON(urlservicio+'historial2/'+servidor, function(data) {
 
         $.each(data, function(i, field) {
             if (repetidosPanel(field)==false){
@@ -240,7 +245,7 @@ function iniciarMapa() {
         mapTypeId: google.maps.MapTypeId.TERRAIN
     });
     //marcadores();
-    $.getJSON(urlservicio+'latencia/', function(data) {
+    $.getJSON(urlservicio+'latencia232/', function(data) {
         $.each(data, function(i, field) {
             var label = "";
             if (field.valor == 'ok') {
@@ -270,21 +275,21 @@ function iniciarMapa() {
             estaciones.push(estacion);
 
 
-            /*	google.maps.event.addListener(estacion, 'click', (function(estacion, l, k) {
+            google.maps.event.addListener(estacion, 'click', (function(estacion) {
             		var est = estacion;
-            		var i = j
             		return function() {
-            			da = data.Inventory.network[l].station;
+            			//da = data.Inventory.network[l].station;
             			//infoWindow.setContent(construirTabla(data.Inventory.network[l].description, da[i].code, da[i].longitude, da[i].latitude, da[i].elevation, data, l, i));
-            			//infoWindow.setPosition();
+            			infoWindow.setContent(estacion.title+" "+estacion.valor);
+            			infoWindow.setPosition();
             			infoWindow.open(map, estacion);
             		}
-            	})(estacion, l));*/
+            	})(estacion));
         });
     })
 
     $("#history").empty();
-    $.getJSON(urlservicio+'historial/', function(data) {
+    $.getJSON(urlservicio+'historial/'+servidor, function(data) {
 
         $.each(data, function(i, field) {
             panel.push(field)

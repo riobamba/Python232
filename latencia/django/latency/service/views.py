@@ -19,14 +19,14 @@ class JSONResponse(HttpResponse):
         
         
 @csrf_exempt
-def service_list(request):
+def service_list232(request):
     """
     Retorna todos los registros de la tabal estado.
     """
     try:
         datos=[]
         cursor = connection.cursor()
-        cursor.execute("select estacion,latitud,longitud, valor, fecha from service_estado sl inner join  service_estacion se on se.id=sl.estacion_id ")
+        cursor.execute("select estacion,latitud,longitud, valor, fecha from service_estado232 sl inner join  service_estacion se on se.id=sl.estacion_id ")
         for row in cursor:
           est= {"estacion":row[0], "latitud":row[1], "longitud":row[2], "valor":row[3], "fecha":str(row[4]) }
           datos.append(est)
@@ -38,14 +38,33 @@ def service_list(request):
         return JSONResponse(resp)
 
 @csrf_exempt
-def service_historial(request):
+def service_list13(request):
+    """
+    Retorna todos los registros de la tabal estado.
+    """
+    try:
+        datos=[]
+        cursor = connection.cursor()
+        cursor.execute("select estacion,latitud,longitud, valor, fecha from service_estado13 sl inner join  service_estacion se on se.id=sl.estacion_id ")
+        for row in cursor:
+          est= {"estacion":row[0], "latitud":row[1], "longitud":row[2], "valor":row[3], "fecha":str(row[4]) }
+          datos.append(est)
+        resp=json.loads(json.dumps(datos,ensure_ascii=False))
+    except Estacion.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        return JSONResponse(resp)
+
+@csrf_exempt
+def service_historial(request,servidor):
     """
     Retorna los ultimos 12 registros de la tabal historial.
     """
     try:
         datos=[]
         cursor = connection.cursor()
-        cursor.execute("select estacion, valor, fecha from service_historial sl inner join  service_estacion se on se.id=sl.estacion_id order by fecha desc limit 10 ")
+        cursor.execute(("select estacion, valor, fecha from service_historial sl inner join  service_estacion se on se.id=sl.estacion_id and servidor='%s' order by fecha desc limit 10 ")% servidor)
         for row in cursor:
           est= {"estacion":row[0], "valor":row[1], "fecha":str(row[2]) }
           datos.append(est)
@@ -56,7 +75,7 @@ def service_historial(request):
     if request.method == 'GET':
         return JSONResponse(resp)
 
-def service_historial_utimos(request):
+def service_historial_utimos(request,servidor):
     """
     Retorna los ultimos registros de la tabal historial.
     """
@@ -66,8 +85,8 @@ def service_historial_utimos(request):
     try:
         datos=[]
         cursor = connection.cursor()
-        cursor.execute(("select estacion, valor, fecha, administrador from service_historial sl inner join  service_estacion se on se.id=sl.estacion_id and fecha BETWEEN '%s' AND '%s'  order by fecha desc  limit 10")%(fecha_atras,fecha_actual))
-        #cursor.execute("select estacion, valor, fecha, administrador from service_historial sl inner join  service_estacion se on se.id=sl.estacion_id and administrador not like 'INTER'  order by fecha desc limit 10")
+        #cursor.execute(("select estacion, valor, fecha, administrador from service_historial sl inner join  service_estacion se on se.id=sl.estacion_id and fecha BETWEEN '%s' AND '%s' order by fecha desc  limit 10")%(fecha_atras,fecha_actual))
+        cursor.execute(("select estacion, valor, fecha, administrador from service_historial sl inner join  service_estacion se on se.id=sl.estacion_id and administrador not like 'INTER' and servidor='%s'  order by fecha desc limit 10")% servidor)
         for row in cursor:
           est= {"estacion":row[0], "valor":row[1], "fecha":str(row[2]),"admin":row[3] }
           datos.append(est)
@@ -79,5 +98,8 @@ def service_historial_utimos(request):
         return JSONResponse(resp)
 
         
-def index(request):
-    return render(request,'service/index.html')
+def seismo1(request):
+    return render(request,'service/seismo1.html')
+
+def xena(request):
+    return render(request,'service/xena.html')

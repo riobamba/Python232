@@ -16,32 +16,49 @@ def cliente():
     url = "http://10.100.100.232:8081/query/objects.json?QC&last=%s" % (time.strftime("%Y%m%d.%H%M%S", time.localtime()))
     #print url
     latencia = dict()
-    response = requests.get(url)
-    if response.status_code == 200:
-        results = response.json()
-        for row in estacion:
-            band=True
-            sta = dict()
-            for result in results['request']['QC']['list']:
-               station = result['id'].split('.')
-               if station[1] == row[1]:
-                  band=False
-                  sta['valor']=result['params']['latency']['value']
-                  sta['disp'] = result['params']['availability']['value']
-                  timestamp = str(result['params']['latency']['timestamp'])
-                  sta['fecha']=datetime.fromtimestamp(int(timestamp[0:10])).strftime('%Y-%m-%d %H:%M:%S')
-                  sta['id_estacion']=row[0]
-            if band :
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            results = response.json()
+            for row in estacion:
+                band = True
+                sta = dict()
+                for result in results['request']['QC']['list']:
+                    station = result['id'].split('.')
+                    if station[1] == row[1]:
+                        band = False
+                        sta['valor'] = result['params']['latency']['value']
+                        sta['disp'] = result['params']['availability']['value']
+                        timestamp = str(result['params']['latency']['timestamp'])
+                        sta['fecha'] = datetime.fromtimestamp(int(timestamp[0:10])).strftime('%Y-%m-%d %H:%M:%S')
+                        sta['id_estacion'] = row[0]
+                if band:
+                    sta['valor'] = -1
+                    sta['disp'] = 0
+                    sta['fecha'] = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
+                    sta['id_estacion'] = row[0]
+                latencia[row[0]] = sta
+        else:
+            print "Error code %s" % (response.status_code)
+            for row in estacion:
+                sta = dict()
                 sta['valor'] = -1
                 sta['disp'] = 0
                 sta['fecha'] = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
                 sta['id_estacion'] = row[0]
-            latencia[row[0]]=sta
-    else:
-        print "Error code %s" % (response.status_code)
+                latencia[row[0]] = sta
+    except requests.exceptions.RequestException as e:
+        print e
+        for row in estacion:
+            sta = dict()
+            sta['valor'] = -1
+            sta['disp'] = 0
+            sta['fecha'] = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
+            sta['id_estacion'] = row[0]
+            latencia[row[0]] = sta
     conn.close()
     verificar(latencia)
-    funcionamiento(latencia)
+    #funcionamiento(latencia)
 
 
 def verificar(latencia):
@@ -68,7 +85,7 @@ def verificar(latencia):
     conn.commit()
     conn.close()
     estados()
-
+'''
 def funcionamiento(latencia):
     conn = sqlite3.connect('../latency.sqlite')
     cursor = conn.cursor()
@@ -77,7 +94,7 @@ def funcionamiento(latencia):
         cursor.execute("INSERT INTO service_funcionamiento_temp (valor,fecha,estacion_id,servidor) VALUES(%s,'%s',%s,'232');" % (data['disp'], datetime.now(), data['id_estacion']))
     conn.commit()
     conn.close()
-
+'''
 
 
 
@@ -115,15 +132,20 @@ def estados():
 
     for i in cursor_latencia:
         if i[1] == "entra":
-            print "Estacion %s Ingresa %s" % (i[0],datetime.now())
+            print "Estacion %s Ingresa %s" % (i[0],i[3])
             cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id,servidor) VALUES (?,?,?,'232')''',('in',datetime.now(), i[2]))
             conn.commit()
+
         elif i[1] == "salio":
-            print "Estacion %s Sale %s" % (i[0],datetime.now())
+            print "Estacion %s Sale %s" % (i[0],i[3])
             cursor.execute('''INSERT INTO service_historial (valor,fecha,estacion_id,servidor) VALUES (?,?,?,'232')''',('out',datetime.now(), i[2]))
             conn.commit()
 
+
     conn.close()
-
-
+'''
+sched = BlockingScheduler()
+sched.add_job(monitor232, 'interval', seconds=60)
+sched.start()
+'''
 

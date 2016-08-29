@@ -16,8 +16,10 @@ var latencia;
 var estaciones = [];
 var panel = new Array();
 var urlservicio="http://127.0.0.1:8000/"
+var servidor="013"
 var soundID = "Thunder";
 var soundID2 = "Thunder2";
+var est_act=0;
 
 function initMap() {
     iniciarMapa();
@@ -114,10 +116,12 @@ function construirTabla(description, codigo, longitud, latitud, elevacion, data,
 }
 
 function marcadores() {
-    $.getJSON(urlservicio+'latencia/', function(data) {
+    $.getJSON(urlservicio+'latencia13/', function(data) {
+    est_act=0;
         $.each(data, function(i, field) {
             var label = "";
             if (field.valor == 'ok') {
+                 est_act+=1;
                 label = "label1";
             } else if (field.valor == 'entra') {
                 label = "label2";
@@ -139,8 +143,9 @@ function marcadores() {
         });
     })
 
+    $("#esta_activas").text("Activas "+est_act+"/"+estaciones.length);
     var nuevos = false;
-    $.getJSON(urlservicio+'historial2/', function(data) {
+    $.getJSON(urlservicio+'historial2/'+servidor, function(data) {
 
         $.each(data, function(i, field) {
             if (repetidosPanel(field)==false){
@@ -240,7 +245,7 @@ function iniciarMapa() {
         mapTypeId: google.maps.MapTypeId.TERRAIN
     });
     //marcadores();
-    $.getJSON(urlservicio+'latencia/', function(data) {
+    $.getJSON(urlservicio+'latencia13/', function(data) {
         $.each(data, function(i, field) {
             var label = "";
             if (field.valor == 'ok') {
@@ -284,7 +289,7 @@ function iniciarMapa() {
     })
 
     $("#history").empty();
-    $.getJSON(urlservicio+'historial/', function(data) {
+    $.getJSON(urlservicio+'historial/'+servidor, function(data) {
 
         $.each(data, function(i, field) {
             panel.push(field)
