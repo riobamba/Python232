@@ -143,9 +143,10 @@ def estados():
 
 
     conn.close()
-'''
+
+
 sched = BlockingScheduler()
 sched.add_job(monitor232, 'interval', seconds=60)
 sched.start()
-'''
+
 

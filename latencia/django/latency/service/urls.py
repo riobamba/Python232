@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^latencia13/$', views.service_list13),
     url(r'^historial/(?P<servidor>[0-9]{3})/$', views.service_historial),
     url(r'^historial2/(?P<servidor>[0-9]{3})/$', views.service_historial_utimos),
+    url(r'^historialEstacion/$', views.service_historial_estacion),
 ]

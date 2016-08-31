@@ -20,6 +20,8 @@ var servidor="013"
 var soundID = "Thunder";
 var soundID2 = "Thunder2";
 var est_act=0;
+var respuesta="";
+var infoWindow = new google.maps.InfoWindow();
 
 function initMap() {
     iniciarMapa();
@@ -69,51 +71,45 @@ function crearMenu() {
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-
-
-function construirTabla(description, codigo, longitud, latitud, elevacion, data, i, j) {
-    var da = data.Inventory.network[i].station;
-    var sl = da[j].sensorLocation;
-    nameStation = da[j].description;
-    codeNetwork = data.Inventory.network[i].code;
-    var canal = "";
-    codigostation = codigo;
-    network = data;
-    idnetwork = i;
-    idstation = j;
-
+function construirTabla(nombre,estacion) {
+    var fil = "";
+    var resp = "";
     tabla = '<table class="table striped hovered" id="main_table_demo">' +
         '<thead>		  ' +
         '<tr>  ' +
-        '<th>Estación</th>' +
-        '<th>' + codigo + '</th>' +
+        '<th>'+ nombre+ '</th>' +
         '</tr>            ' +
         '</thead>         ' +
-        '<tbody>          ' +
-        '<tr >             ' +
-        '    <td colspan="2">' + nameStation + '</td>   ' +
+        '<thead>          ' +
+        '<tr>  ' +
+        '<th>Estado</th>' +
+        '<th>Fecha</th>' +
         '</tr>            ' +
-        '<tr >             ' +
-        '    <td colspan="2">' + description + '</td>   ' +
-        '</tr>            ' +
-        '<tr>             ' +
-        '    <td>Latitud</td>   ' +
-        '    <td>' + latitud + '</td>   ' +
-        '</tr>            ' +
-        '<tr>             ' +
-        '    <td>Longitud</td>   ' +
-        '    <td>' + longitud + '</td>   ' +
-        '</tr>            ' +
-        '<tr>             ' +
-        '    <td>Elevación</td>   ' +
-        '    <td>' + elevacion + '</td>   ' +
-        '</tr>            ' +
-        '</tbody>         ' +
-        '</table>         ' +
-        '<button class="button success small-button" onclick="showDialog()">Historial de funcionamiento</button>'
-    return tabla;
+        '</thead>         ' +
+        '<tbody>';
+
+   $.getJSON(urlservicio+'historialEstacion/?servidor=013&estacion='+nombre, function(data) {
+        $.each(data, function(i, field) {
+				b=field.valor;
+				f=field.fecha;
+				var fila = "";
+				if(b == "in"){
+				    b = "<font color='green'><b>Ingresa</b></font>";
+				}
+				if(b == "out"){
+				    b = "<font color='red'><b>Sale</b></font>";;
+				    fila = "<tr bgcolor='#FF0000'>"
+				}
+				fil += "<tr><td>" + b + "</td><td>" + f + "</td></tr>";
+			});
+			var fin=  '</tbody></table>';
+			respuesta= tabla.concat(fil,fin);
+			infoWindow.setContent(respuesta);
+			infoWindow.open(map, estacion);
+	})
 }
+
+
 
 function marcadores() {
     $.getJSON(urlservicio+'latencia13/', function(data) {
@@ -273,6 +269,18 @@ function iniciarMapa() {
             });
 
             estaciones.push(estacion);
+
+
+             google.maps.event.addListener(estacion, 'click', (function(estacion) {
+            		var est = estacion;
+            		return function() {
+            			//da = data.Inventory.network[l].station;
+            			construirTabla(estacion.title,estacion);
+            			//infoWindow.setContent(estacion.title+" "+estacion.valor);
+            			//infoWindow.setPosition();
+
+            		}
+            })(estacion));
 
 
             /*	google.maps.event.addListener(estacion, 'click', (function(estacion, l, k) {

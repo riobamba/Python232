@@ -1,0 +1,4 @@
+Comados seiscomp3
+
+Muestra los cambios que se producen en el log/seedlink
+tail -f /opt/seiscomp3/var/log/seedlink.log

@@ -10,6 +10,16 @@
     height: 100%
             /*margin: 0 auto;*/
         }
+#convencion {
+
+    position: absolute;
+    top: 82%;
+    left: 70%;
+    width: 10%;
+    /* height: 100%; */
+    z-index: 1;
+}
+
 /*.label {
 padding: 0px;
 margin:0;
@@ -29,6 +39,29 @@ font-weight: 400;
 font-size: 8px;
 text-align: center;
 }*/
+.label1c,.label2c,.label3c,.label4c {
+    width: 25px;
+    height: 25px;
+    -webkit-border-radius: 50% 50% 50% 50%;
+    border-radius: 50% 50% 50% 50%;
+    color: white;
+    padding: 0px;
+    font-family: message-box;
+    font-weight: 400;
+    font-size: 12px;
+    text-align: left;
+    line-height: 25px;
+}
+.nombre-convencion{
+    width: 25px;
+    color: black;
+   font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    left: 70%;
+    align-items: baseline;
+}
+
 .label,.label1,.label2,.label3,.label4 {
     width: 30px;
     height: 30px;
@@ -52,7 +85,16 @@ text-align: center;
     border: 2px solid #535353;
 }
 
+.label1c {
+    background: #4d9b19;
+    border: 2px solid #535353;
+}
+
 .label2 {
+    background: #0a3479;
+    border: 2px solid #008b86;
+}
+.label2c {
     background: #0a3479;
     border: 2px solid #008b86;
 }
@@ -61,7 +103,17 @@ text-align: center;
     border: 2px solid #535353;
 }
 
+.label3c {
+    background: #ad1b03;
+    border: 2px solid #535353;
+}
+
 .label4 {
+    background: #2f230c;
+    border: 2px solid #535353;
+}
+
+.label4c {
     background: #2f230c;
     border: 2px solid #535353;
 }

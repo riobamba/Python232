@@ -20,6 +20,8 @@ var servidor="232"
 var soundID = "Thunder";
 var soundID2 = "Thunder2";
 var est_act=0;
+var respuesta="";
+var infoWindow = new google.maps.InfoWindow();
 
 function initMap() {
     iniciarMapa();
@@ -69,50 +71,52 @@ function crearMenu() {
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-
-
-function construirTabla(description, codigo, longitud, latitud, elevacion, data, i, j) {
-    var da = data.Inventory.network[i].station;
-    var sl = da[j].sensorLocation;
-    nameStation = da[j].description;
-    codeNetwork = data.Inventory.network[i].code;
-    var canal = "";
-    codigostation = codigo;
-    network = data;
-    idnetwork = i;
-    idstation = j;
-
+function construirTabla(nombre,estacion) {
+    var fil = "";
+    var resp = "";
     tabla = '<table class="table striped hovered" id="main_table_demo">' +
         '<thead>		  ' +
         '<tr>  ' +
-        '<th>Estación</th>' +
-        '<th>' + codigo + '</th>' +
+        '<th>'+ nombre+ '</th>' +
         '</tr>            ' +
         '</thead>         ' +
-        '<tbody>          ' +
-        '<tr >             ' +
-        '    <td colspan="2">' + nameStation + '</td>   ' +
+        '<thead>          ' +
+        '<tr>  ' +
+        '<th>Estado</th>' +
+        '<th>Fecha</th>' +
         '</tr>            ' +
-        '<tr >             ' +
-        '    <td colspan="2">' + description + '</td>   ' +
-        '</tr>            ' +
-        '<tr>             ' +
-        '    <td>Latitud</td>   ' +
-        '    <td>' + latitud + '</td>   ' +
-        '</tr>            ' +
-        '<tr>             ' +
-        '    <td>Longitud</td>   ' +
-        '    <td>' + longitud + '</td>   ' +
-        '</tr>            ' +
-        '<tr>             ' +
-        '    <td>Elevación</td>   ' +
-        '    <td>' + elevacion + '</td>   ' +
-        '</tr>            ' +
-        '</tbody>         ' +
-        '</table>         ' +
-        '<button class="button success small-button" onclick="showDialog()">Historial de funcionamiento</button>'
-    return tabla;
+        '</thead>         ' +
+        '<tbody>';
+
+   $.getJSON(urlservicio+'historialEstacion/?servidor=232&estacion='+nombre, function(data) {
+        var long =data.length
+        if(long > 0){
+            $.each(data, function(i, field) {
+				b=field.valor;
+				f=field.fecha;
+				var fila = "";
+				if(b == "in"){
+				    b = "<font color='green'><b>Ingresa</b></font>";
+				}
+				if(b == "out"){
+				    b = "<font color='red'><b>Sale</b></font>";;
+				    fila = "<tr bgcolor='#FF0000'>"
+				}
+				fil += "<tr><td>" + b + "</td><td>" + f + "</td></tr>";
+			});
+			var fin=  '</tbody></table>';
+			respuesta= tabla.concat(fil,fin);
+			infoWindow.setContent(respuesta);
+			infoWindow.open(map, estacion);
+        }else{
+            tabla = '<table class="table striped hovered" id="main_table_demo"><thead>' +
+            '<tr><th>'+ nombre+ '</th></tr></thead>'+
+            '<thead><tr><th>Sin Novedad</th></tr></thead></table>';
+            infoWindow.setContent(tabla);
+			infoWindow.open(map, estacion);
+        }
+
+	})
 }
 
 function marcadores() {
@@ -207,10 +211,8 @@ function repetidosPanel(field){
                     //alert(panel[i].estacion+" == "+field.estacion+" && "+panel[i].fecha+" =="+ field.fecha)
                     return true;
                 }
-
         }
         return false;
-
 }
 
 function pintarPanel() {
@@ -234,7 +236,7 @@ function clearOverlays() {
 
 
 function iniciarMapa() {
-    var infoWindow = new google.maps.InfoWindow();
+
     var estacion = "";
     map = new google.maps.Map(document.getElementById('map_canvas'), {
         zoom: 6,
@@ -279,10 +281,10 @@ function iniciarMapa() {
             		var est = estacion;
             		return function() {
             			//da = data.Inventory.network[l].station;
-            			//infoWindow.setContent(construirTabla(data.Inventory.network[l].description, da[i].code, da[i].longitude, da[i].latitude, da[i].elevation, data, l, i));
-            			infoWindow.setContent(estacion.title+" "+estacion.valor);
-            			infoWindow.setPosition();
-            			infoWindow.open(map, estacion);
+            			construirTabla(estacion.title,estacion);
+            			//infoWindow.setContent(estacion.title+" "+estacion.valor);
+            			//infoWindow.setPosition();
+
             		}
             	})(estacion));
         });
@@ -329,4 +331,13 @@ function playSoundSalida () {
 
 function playSoundIngreso () {
   createjs.Sound.play(soundID2);
+}
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
 }
